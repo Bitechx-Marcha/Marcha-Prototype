@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Marcha — Gateway de Pagamento</title>
+<link rel="icon" type="image/svg+xml" id="favicon">
+<link rel="apple-touch-icon" id="faviconApple">
 <style>
   :root{
     /* ===================== Marcha Premium UI — multi-tenant ===================== */
@@ -51,19 +53,22 @@
   }
   /* ===== PRESETS DE TENANT (white-label) — adicionar a classe no <body> para ativar.
      Só os --brand-* mudam; STATUS (success/warning/info/danger/neutral) permanecem. ===== */
-  body.theme-blue  { --brand-50:#eaf1ff;--brand-100:#d6e4ff;--brand-400:#5b8def;--brand-500:#2f6df0;--brand-600:#1f56c8;--brand-700:#173f93;--brand-ring:rgba(47,109,240,.30); }
-  body.theme-green { --brand-50:#e9f9f0;--brand-100:#cdeedb;--brand-400:#3ec27a;--brand-500:#12a150;--brand-600:#0d8040;--brand-700:#0a5f30;--brand-ring:rgba(18,161,80,.30); }
-  body.theme-black { --brand-50:#f1f2f5;--brand-100:#e1e3e8;--brand-400:#565d68;--brand-500:#1c2128;--brand-600:#12151c;--brand-700:#0a0c11;--brand-ring:rgba(28,33,40,.32); }
+  body.theme-blue  { --brand-50:#eaf1ff;--brand-100:#d6e4ff;--brand-400:#5b8def;--brand-500:#2f6df0;--brand-600:#1f56c8;--brand-700:#173f93;--brand-ring:rgba(47,109,240,.30); --secondary:#18b6c9;--secondary-strong:#0f8f9e;--secondary-soft:#d6f1f5; }
+  body.theme-green { --brand-50:#e9f9f0;--brand-100:#cdeedb;--brand-400:#3ec27a;--brand-500:#12a150;--brand-600:#0d8040;--brand-700:#0a5f30;--brand-ring:rgba(18,161,80,.30); --secondary:#f5a623;--secondary-strong:#cf8410;--secondary-soft:#fdeccc; }
+  body.theme-black { --brand-50:#f1f2f5;--brand-100:#e1e3e8;--brand-400:#565d68;--brand-500:#1c2128;--brand-600:#12151c;--brand-700:#0a0c11;--brand-ring:rgba(28,33,40,.32); --secondary:#8b919b;--secondary-strong:#646a73;--secondary-soft:#e6e8ec; }
   /* futuros: theme-purple, theme-orange, theme-gold — mesma estrutura, só trocar --brand-*. */
   /* Tokens DERIVADOS de marca — declarados em body p/ re-resolverem ao trocar de tenant. */
   body{
     --brand-ring:rgba(255,31,142,.30);
     --accent:var(--brand-500); --accent-hover:var(--brand-600);
     --accent-soft:var(--brand-50); --accent-border:var(--brand-100);
+    /* COR SECUNDÁRIA — 2ª cor do sistema (gráfico + realces). Tenant-aware. */
+    --secondary:#ff9d2e; --secondary-strong:#e07d12; --secondary-soft:#ffe7c7;
     --pink:var(--brand-500); --pink2:var(--brand-400);
     --grad:linear-gradient(135deg,var(--brand-500),var(--brand-600));
     --grad-soft:linear-gradient(135deg,var(--brand-50),var(--brand-100));
-    --bar:linear-gradient(180deg,var(--brand-500) 0%,#ff4f97 38%,#ff8a5f 72%,#ffd24a 100%);
+    /* barra do gráfico = primária (topo) -> secundária (base) */
+    --bar:linear-gradient(180deg,var(--brand-500),var(--secondary));
   }
   body.theme-blue { --brand-ring:rgba(47,109,240,.30); }
   body.theme-green{ --brand-ring:rgba(18,161,80,.30); }
@@ -82,6 +87,11 @@
   .logo{font-style:italic;font-weight:800;font-size:26px;letter-spacing:.5px;color:#fff;
     padding:6px 4px 22px;display:flex;align-items:center;gap:2px}
   .logo .x{color:var(--pink);font-size:18px;transform:translateY(-6px) rotate(8deg);display:inline-block}
+  .logo .rk{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px}
+  .logo .rk svg{width:100%;height:100%;transform:rotate(6deg)}
+  .logo .wm{font-style:italic;font-weight:800;letter-spacing:.5px}
+  .sidebar.col .logo .wm{display:none}
+  .sidebar.col .logo .rk{width:34px;height:34px;flex-basis:34px}
   .nav{display:flex;flex-direction:column;gap:3px;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;margin:0 -4px;padding:0 4px;scrollbar-width:none;-ms-overflow-style:none}
   .nav::-webkit-scrollbar{width:0;height:0;display:none}
   .nav-cat{font-size:9.5px;font-weight:700;letter-spacing:.7px;color:#56575e;text-transform:uppercase;padding:13px 12px 5px}
@@ -1176,7 +1186,7 @@
   }
 
   /* ===== platform config ===== */
-  .cfg-card-pink{border:2px solid var(--pink);margin-bottom:14px}
+  .cfg-card-pink{border:1px solid var(--line);margin-bottom:14px}
   .cfg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
   .cfg-block{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);cursor:pointer;transition:.12s}
   .cfg-block:hover{border-color:var(--pink);transform:translateY(-2px)}
@@ -1422,13 +1432,13 @@
 
 <div class="app" id="app">
   <div class="mtopbar">
-    <div class="logo">mar<span class="x">✕</span>cha</div>
+    <div class="logo"><span class="rk"><svg viewBox="0 0 32 32" fill="none"><path d="M19 4.5c4.2 2 6.5 6.2 6.5 11.2l-.2 1.3-4.6-1-3.3-3.3-1-4.6 1.3-.2z" fill="#cdd1d8"/><circle cx="19.2" cy="11" r="2.5" fill="var(--accent)"/><path d="M12 14l-4.2 1.1 2.1 3.1 3.2-1z" fill="var(--accent)"/><path d="M18 20.2l1.1 4.2-3.1-1.1-1-3.2z" fill="var(--accent)"/><path d="M11.2 18.2l-3.4 5.4 5.4-3.4z" fill="var(--secondary)"/></svg></span><span class="wm">marcha</span></div>
     <button class="mham" onclick="toggleNav()">☰</button>
   </div>
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <button class="sb-collapse" onclick="toggleSidebar()" title="Recolher menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
-    <div class="logo">mar<span class="x">✕</span>cha</div>
+    <div class="logo"><span class="rk"><svg viewBox="0 0 32 32" fill="none"><path d="M19 4.5c4.2 2 6.5 6.2 6.5 11.2l-.2 1.3-4.6-1-3.3-3.3-1-4.6 1.3-.2z" fill="#cdd1d8"/><circle cx="19.2" cy="11" r="2.5" fill="var(--accent)"/><path d="M12 14l-4.2 1.1 2.1 3.1 3.2-1z" fill="var(--accent)"/><path d="M18 20.2l1.1 4.2-3.1-1.1-1-3.2z" fill="var(--accent)"/><path d="M11.2 18.2l-3.4 5.4 5.4-3.4z" fill="var(--secondary)"/></svg></span><span class="wm">marcha</span></div>
     <div class="store-wrap">
       <div class="store-sel" id="storeSel" onclick="toggleStore(event)">
         <div class="st-av">MH</div>
@@ -2601,6 +2611,44 @@
     <section class="page" id="page-empresa">
       <button class="back" onclick="go('config')">‹ Voltar para configurações</button>
       <div class="head"><h1>Minha Empresa</h1><p>Veja e edite os dados da sua empresa</p></div>
+
+      <!-- ===== PERSONALIZAÇÃO (WHITE-LABEL) — INÍCIO ===== -->
+      <div class="card cfg-card-pink" id="wlCard">
+        <div class="sec-t pink">🎨 PERSONALIZAÇÃO (WHITE-LABEL)</div>
+        <div class="sec-sub">Deixe o gateway com a cara da sua marca. As cores aplicam ao vivo em todo o sistema.</div>
+        <div class="prof-grp">Dados gerais</div>
+        <div class="form-row">
+          <div class="inp"><label>Nome de Exibição</label><input id="wlName" value="Marcha" oninput="wlSetName(this.value)"></div>
+          <div class="inp"><label>Slogan</label><input id="wlSlogan" value="Suba de nível. Sem gravidade."></div>
+        </div>
+        <div class="prof-grp">Tema</div>
+        <div class="form-row" style="grid-template-columns:1.2fr 1fr 1fr">
+          <div class="inp"><label>Tema base</label><select class="ctrl-sel" id="wlTheme" onchange="wlPickTheme(this.value)"><option value="">Personalizado</option><option value="marcha" selected>Marcha (magenta)</option><option value="blue">Azul fintech</option><option value="green">Verde commerce</option><option value="black">Preto premium</option></select></div>
+          <div class="inp"><label>Cor Primária</label><div style="display:flex;align-items:center;gap:10px;height:40px"><input type="color" id="wlPrimary" value="#ff1f8e" oninput="wlSetPrimary(this.value)" style="width:46px;height:34px;border:1px solid var(--line);border-radius:8px;background:none;cursor:pointer;padding:2px"><span id="wlPrimaryHex" style="font-size:12.5px;color:var(--text-secondary)">#ff1f8e</span></div></div>
+          <div class="inp"><label>Cor Secundária</label><div style="display:flex;align-items:center;gap:10px;height:40px"><input type="color" id="wlSecondary" value="#ff9d2e" oninput="wlSetSecondary(this.value)" style="width:46px;height:34px;border:1px solid var(--line);border-radius:8px;background:none;cursor:pointer;padding:2px"><span id="wlSecondaryHex" style="font-size:12.5px;color:var(--text-secondary)">#ff9d2e</span></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface-sunken)">
+          <span style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px">Preview</span>
+          <button class="btn btn-pink btn-sm" type="button">Ação primária</button>
+          <button class="btn btn-ghost btn-sm" type="button">Secundária</button>
+          <span class="tag t-green">Pago</span><span class="tag t-amber">Pendente</span><span class="tag t-red">Disputa</span>
+          <span style="display:inline-block;width:120px;height:22px;border-radius:6px;background:var(--bar)"></span>
+        </div>
+        <div class="prof-grp">Imagens</div>
+        <div class="form-row" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="inp"><label>Ícone (50×50 .png)</label><button class="btn btn-ghost btn-sm" type="button" onclick="toast('Selecione um arquivo .png')">⬆ Enviar ícone</button></div>
+          <div class="inp"><label>Logomarca (200×50 .png)</label><button class="btn btn-ghost btn-sm" type="button" onclick="toast('Selecione um arquivo .png')">⬆ Enviar logomarca</button></div>
+          <div class="inp"><label>Favicon (24×24 .png)</label><button class="btn btn-ghost btn-sm" type="button" onclick="toast('Selecione um arquivo .png')">⬆ Enviar favicon</button></div>
+        </div>
+        <div class="form-row" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="inp"><label>Ícone (Dark) </label><button class="btn btn-ghost btn-sm" type="button" onclick="toast('Selecione um arquivo .png')">⬆ Enviar</button></div>
+          <div class="inp"><label>Logomarca (Dark)</label><button class="btn btn-ghost btn-sm" type="button" onclick="toast('Selecione um arquivo .png')">⬆ Enviar</button></div>
+          <div class="inp"><label>Banner de Boas-Vindas (1920×1080)</label><button class="btn btn-ghost btn-sm" type="button" onclick="toast('Selecione um arquivo')">⬆ Enviar banner</button></div>
+        </div>
+        <button class="btn btn-pink" style="float:right" onclick="toast('Personalização salva')">💾 Salvar personalização</button><div style="clear:both"></div>
+      </div>
+      <!-- ===== PERSONALIZAÇÃO (WHITE-LABEL) — FIM ===== -->
+
       <div class="card cfg-card-pink">
         <div class="sec-t pink">🏢 INFORMAÇÕES DA EMPRESA</div><div class="sec-sub">Configure as principais informações sobre a sua empresa.</div>
         <div class="form-row"><div class="inp"><label>Tipo de conta</label><input value="Pessoa Jurídica" readonly style="color:var(--soft)"></div><div class="inp"><label>CPF/CNPJ</label><input value="58.300.812/0001-32" readonly style="color:var(--soft)"></div></div>
@@ -4306,6 +4354,60 @@ function openMktEdit(i){
 function closeMktEdit(){document.getElementById('mktModal').classList.remove('show');}
 document.addEventListener('click',function(e){var p=e.target.closest&&e.target.closest('.seg-pill');if(p){[].forEach.call(p.parentElement.children,function(x){x.classList.remove('on');});p.classList.add('on');}});
 
+/* ===== White-label / Personalização (cores ao vivo) — INÍCIO ===== */
+function wlHexToRgb(h){h=(h||'').replace('#','');if(h.length===3)h=h.replace(/(.)/g,'$1$1');return [parseInt(h.slice(0,2),16)||0,parseInt(h.slice(2,4),16)||0,parseInt(h.slice(4,6),16)||0];}
+function wlClamp(x){return Math.max(0,Math.min(255,Math.round(x)));}
+function wlToHex(r){return '#'+r.map(function(x){return ('0'+wlClamp(x).toString(16)).slice(-2);}).join('');}
+function wlMix(a,b,t){return a.map(function(x,i){return x+(b[i]-x)*t;});}
+function wlLight(h,t){return wlToHex(wlMix(wlHexToRgb(h),[255,255,255],t));}
+function wlDark(h,t){return wlToHex(wlMix(wlHexToRgb(h),[0,0,0],t));}
+function wlSetPrimary(hex){
+  var s=document.body.style;
+  s.setProperty('--brand-500',hex);
+  s.setProperty('--brand-600',wlDark(hex,.12));
+  s.setProperty('--brand-700',wlDark(hex,.30));
+  s.setProperty('--brand-400',wlLight(hex,.25));
+  s.setProperty('--brand-100',wlLight(hex,.80));
+  s.setProperty('--brand-50',wlLight(hex,.90));
+  var r=wlHexToRgb(hex); s.setProperty('--brand-ring','rgba('+r[0]+','+r[1]+','+r[2]+',.30)');
+  var hx=document.getElementById('wlPrimaryHex'); if(hx)hx.textContent=hex;
+}
+function wlSetSecondary(hex){
+  var s=document.body.style;
+  s.setProperty('--secondary',hex);
+  s.setProperty('--secondary-strong',wlDark(hex,.15));
+  s.setProperty('--secondary-soft',wlLight(hex,.82));
+  var hx=document.getElementById('wlSecondaryHex'); if(hx)hx.textContent=hex;
+}
+function wlClearInline(){['--brand-500','--brand-600','--brand-700','--brand-400','--brand-100','--brand-50','--brand-ring','--secondary','--secondary-strong','--secondary-soft'].forEach(function(v){document.body.style.removeProperty(v);});}
+function wlNorm(c){c=(c||'').trim();if(c.charAt(0)==='#')return c.length===4?wlToHex(wlHexToRgb(c)):c;var m=c.match(/\d+/g);return m?wlToHex([+m[0],+m[1],+m[2]]):'#000000';}
+function wlSyncPickers(){
+  var cs=getComputedStyle(document.body);
+  var p=wlNorm(cs.getPropertyValue('--brand-500')), sec=wlNorm(cs.getPropertyValue('--secondary'));
+  var pe=document.getElementById('wlPrimary'); if(pe)pe.value=p; var ph=document.getElementById('wlPrimaryHex'); if(ph)ph.textContent=p;
+  var se=document.getElementById('wlSecondary'); if(se)se.value=sec; var sh=document.getElementById('wlSecondaryHex'); if(sh)sh.textContent=sec;
+}
+function wlPickTheme(t){
+  document.body.classList.remove('theme-blue','theme-green','theme-black');
+  wlClearInline();
+  if(t==='blue'||t==='green'||t==='black')document.body.classList.add('theme-'+t);
+  setTimeout(wlSyncPickers,0);
+}
+function wlSetName(v){
+  v=(v||'').trim()||'Marcha';
+  [].forEach.call(document.querySelectorAll('.logo .wm'),function(e){e.textContent=v.toLowerCase();});
+  document.title=v+' — Gateway de Pagamento';
+}
+function wlInitFavicon(){
+  try{
+    var svg="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='#0c0e13'/><path d='M19 4.5c4.2 2 6.5 6.2 6.5 11.2l-.2 1.3-4.6-1-3.3-3.3-1-4.6 1.3-.2z' fill='#cdd1d8'/><circle cx='19.2' cy='11' r='2.5' fill='#ff1f8e'/><path d='M12 14l-4.2 1.1 2.1 3.1 3.2-1z' fill='#ff1f8e'/><path d='M18 20.2l1.1 4.2-3.1-1.1-1-3.2z' fill='#ff1f8e'/><path d='M11.2 18.2l-3.4 5.4 5.4-3.4z' fill='#ff9d2e'/></svg>";
+    var uri='data:image/svg+xml;base64,'+btoa(svg);
+    var f=document.getElementById('favicon'); if(f)f.href=uri;
+    var fa=document.getElementById('faviconApple'); if(fa)fa.href=uri;
+  }catch(e){}
+}
+wlInitFavicon();
+/* ===== White-label — FIM ===== */
 enhanceSelects();
 pedInit();
 mkRender();
