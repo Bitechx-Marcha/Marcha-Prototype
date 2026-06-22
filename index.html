@@ -6,30 +6,68 @@
 <title>Marcha — Gateway de Pagamento</title>
 <style>
   :root{
-    --sbg:#eceef2;--sbd:#e0e2e7;--stx:#16181d;--snv:#54585f;--snh:#e1e3e8;--ssf:#9aa0aa;--scd:#fff;--spl:#f1f2f5;--ssn:#a7adb6;--sbar:#e7e9ee;
-    --bg:#d8dadd;
-    --surface:#eef0f2;
-    --panel:#ffffff;
-    --ink:#0d0d10;
-    --muted:#8b909a;
-    --soft:#b9bdc6;
-    --line:#e7e9ee;
-    --line2:#eef0f4;
-    --pink:#ff1f8e;
-    --pink2:#ff62a6;
-    --grad:linear-gradient(135deg,#ff2d9b 0%,#ff6aa6 100%);
-    --grad-soft:linear-gradient(135deg,#ffe3f0,#ffd9ea);
-    --bar:linear-gradient(180deg,#ff2d9b 0%,#ff4f97 38%,#ff8a5f 72%,#ffd24a 100%);
-    --green:#129a4d; --green-bg:#e7f7ee; --green-bd:#bde8cd;
-    --amber:#b9820a; --amber-bg:#fff5dc; --amber-bd:#f1dca0;
+    /* ===================== Marcha Premium UI — multi-tenant ===================== */
+    /* BRAND / TENANT — troque SÓ estes tokens para mudar a marca (white-label). */
+    --brand-50:#fff0f7; --brand-100:#ffe1ef; --brand-400:#ff62a6;
+    --brand-500:#ff1f8e; --brand-600:#e6157a; --brand-700:#b81065;
+    /* --brand-ring/--accent* e aliases de marca ficam em body{} (após os presets) p/ trocar tenant via classe no body */
+
+    /* SUPERFÍCIES / TEXTO (neutros, white-label) */
+    --surface-page:#f4f6f8; --surface-card:#ffffff; --surface-raised:#ffffff; --surface-sunken:#f7f8fa;
+    --border-subtle:#e8ebf0; --border-strong:#d8dce3;
+    --text-primary:#0c0e13; --text-secondary:#525a66; --text-muted:#8a93a0;
+
+    /* STATUS SEMÂNTICO — independente da marca (NÃO muda por tenant) */
+    --success:#0f9d4f; --success-bg:#e7f7ee; --success-border:#bfe6cf;
+    --warning:#b9820a; --warning-bg:#fff5dc; --warning-border:#f1dca0;
+    --info:#2f6df0;    --info-bg:#e9f1ff;    --info-border:#c7daff;
+    --danger:#d92d54;  --danger-bg:#ffe5ec;  --danger-border:#f6bccd;
+    --neutral:#5b6472; --neutral-bg:#eef1f5; --neutral-border:#dde1e8;
+    /* FINANCEIRO (semântico) */
+    --fin-available:var(--success); --fin-pending:var(--warning); --fin-blocked:var(--danger); --fin-reserved:var(--neutral);
+
+    /* ESCALA: radius + sombras */
+    --r-sm:8px; --r-md:10px; --r-lg:14px; --r-pill:999px;
+    --sh-1:0 1px 2px rgba(16,18,24,.05),0 1px 3px rgba(16,18,24,.05);
+    --sh-2:0 4px 14px rgba(16,18,24,.08);
+    --sh-pop:0 12px 32px rgba(16,18,24,.16);
+
+    /* ===================== ALIASES (compat — sem hex de marca espalhado) ===================== */
+    --bg:var(--surface-page); --surface:var(--surface-page); --panel:var(--surface-card);
+    --ink:var(--text-primary); --muted:var(--text-muted); --soft:#aab2bd;
+    --line:var(--border-subtle); --line2:#f1f3f6;
+    /* --pink/--pink2/--grad/--grad-soft/--bar definidos em body{} (tenant-aware) */
+    --green:var(--success); --green-bg:var(--success-bg); --green-bd:var(--success-border);
+    --amber:var(--warning); --amber-bg:var(--warning-bg); --amber-bd:var(--warning-border);
     --orange:#d6671a; --orange-bg:#ffe9d6; --orange-bd:#f4c79e;
-    --red:#dc2f63;  --red-bg:#ffe3ec;  --red-bd:#f4b6cb;
-    --radius:14px;
+    --red:var(--danger); --red-bg:var(--danger-bg); --red-bd:var(--danger-border);
+    --radius:var(--r-lg);
     --sb:#0a0a0b;
     --cream:#fbf4e6;--cream2:#fdf8ee;
-    --shadow:0 1px 2px rgba(16,18,24,.04),0 8px 24px rgba(16,18,24,.06);
+    --shadow:var(--sh-1);
     --font:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    /* sidebar (tema claro; body.dark sobrescreve) */
+    --sbg:#eef0f3;--sbd:#e2e5ea;--stx:#16181d;--snv:#54585f;--snh:#e7e9ee;--ssf:#9aa0aa;--scd:#fff;--spl:#f1f2f5;--ssn:#a7adb6;--sbar:#e7e9ee;
   }
+  /* ===== PRESETS DE TENANT (white-label) — adicionar a classe no <body> para ativar.
+     Só os --brand-* mudam; STATUS (success/warning/info/danger/neutral) permanecem. ===== */
+  body.theme-blue  { --brand-50:#eaf1ff;--brand-100:#d6e4ff;--brand-400:#5b8def;--brand-500:#2f6df0;--brand-600:#1f56c8;--brand-700:#173f93;--brand-ring:rgba(47,109,240,.30); }
+  body.theme-green { --brand-50:#e9f9f0;--brand-100:#cdeedb;--brand-400:#3ec27a;--brand-500:#12a150;--brand-600:#0d8040;--brand-700:#0a5f30;--brand-ring:rgba(18,161,80,.30); }
+  body.theme-black { --brand-50:#f1f2f5;--brand-100:#e1e3e8;--brand-400:#565d68;--brand-500:#1c2128;--brand-600:#12151c;--brand-700:#0a0c11;--brand-ring:rgba(28,33,40,.32); }
+  /* futuros: theme-purple, theme-orange, theme-gold — mesma estrutura, só trocar --brand-*. */
+  /* Tokens DERIVADOS de marca — declarados em body p/ re-resolverem ao trocar de tenant. */
+  body{
+    --brand-ring:rgba(255,31,142,.30);
+    --accent:var(--brand-500); --accent-hover:var(--brand-600);
+    --accent-soft:var(--brand-50); --accent-border:var(--brand-100);
+    --pink:var(--brand-500); --pink2:var(--brand-400);
+    --grad:linear-gradient(135deg,var(--brand-500),var(--brand-600));
+    --grad-soft:linear-gradient(135deg,var(--brand-50),var(--brand-100));
+    --bar:linear-gradient(180deg,var(--brand-500) 0%,#ff4f97 38%,#ff8a5f 72%,#ffd24a 100%);
+  }
+  body.theme-blue { --brand-ring:rgba(47,109,240,.30); }
+  body.theme-green{ --brand-ring:rgba(18,161,80,.30); }
+  body.theme-black{ --brand-ring:rgba(28,33,40,.32); }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:13px;-webkit-font-smoothing:antialiased}
@@ -50,7 +88,7 @@
   .nav a{display:flex;align-items:center;gap:11px;padding:8px 12px;border-radius:10px;color:#d7d8db;
     font-style:italic;font-weight:600;font-size:13px;cursor:pointer;text-decoration:none;transition:.15s;border:1px solid transparent}
   .nav a:hover{background:#161618;color:#fff}
-  .nav a.active{background:var(--grad);color:#fff;box-shadow:0 0 0 1px rgba(255,31,142,.5),0 6px 16px rgba(255,31,142,.35)}
+  .nav a.active{background:var(--accent-soft);color:var(--brand-700);box-shadow:inset 3px 0 0 var(--accent)}
   .nav-gap{height:1px;background:#26262a;margin:9px 6px}
   .nav-sec{font-size:9.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:#5b5c63;padding:10px 14px 4px}
   .nav-sec:first-child{padding-top:2px}
@@ -151,7 +189,7 @@
   .rj-top{display:flex;gap:14px;align-items:flex-start}
   .rj-thumb{width:74px;height:74px;border-radius:10px;background:#f1f2f5;display:flex;align-items:center;justify-content:center;font-size:32px;flex:0 0 74px}
   .rj-info{flex:1;min-width:0}
-  .rj-badge{font-size:9.5px;font-weight:800;background:#ffe3f0;color:#ff1f8e;padding:3px 8px;border-radius:6px}
+  .rj-badge{font-size:9.5px;font-weight:800;background:var(--accent-soft);color:var(--accent);padding:3px 8px;border-radius:6px}
   .rj-name{font-weight:800;font-size:15px;margin:7px 0 2px}
   .rj-desc{font-size:12px;color:var(--soft)}
   .rj-meta{border:1px solid var(--line);border-radius:10px;padding:8px 14px;text-align:center;flex:0 0 auto}
@@ -207,7 +245,7 @@
   .tb-title{display:flex;align-items:center;gap:7px;white-space:nowrap}
   .tb-title .bc-p{font-size:14px;font-weight:600;color:var(--soft)}
   .tb-title .bc-s{font-size:14px;color:var(--soft)}
-  .tb-title .bc-c{font-size:17px;font-weight:800;font-style:italic;color:var(--ink);letter-spacing:.2px}
+  .tb-title .bc-c{font-size:17px;font-weight:800;color:var(--ink);letter-spacing:-.2px}
   .tb-prog{display:flex;align-items:center;gap:9px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 13px;box-shadow:var(--shadow);cursor:pointer}
   .tb-prog:hover{border-color:var(--pink)}
   .tb-prog>svg{width:16px;height:16px;stroke:#b9820a;fill:none;flex:0 0 auto}
@@ -263,7 +301,7 @@
   @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
   .head{background:var(--panel);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);margin-bottom:14px}
-  .head h1{font-style:italic;font-weight:800;font-size:21px}
+  .head h1{font-weight:800;font-size:20px;letter-spacing:-.2px}
   .head p{color:var(--soft);font-style:italic;font-size:13px;margin-top:3px}
 
   /* filters */
@@ -289,7 +327,7 @@
   .dd-btn svg{width:14px;height:14px;color:var(--soft);transition:.2s;flex:0 0 14px}
   .dd.open .dd-btn{border-color:var(--pink);color:var(--pink)}
   .dd.open .dd-btn svg{transform:rotate(180deg);color:var(--pink)}
-  .dd-menu{position:absolute;top:44px;left:0;right:0;background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:0 14px 40px rgba(16,18,24,.16);padding:6px;display:none;z-index:40}
+  .dd-menu{position:absolute;top:44px;left:0;right:0;background:var(--surface-raised);border:1px solid var(--line);border-radius:var(--r-md);box-shadow:var(--sh-pop);padding:6px;display:none;z-index:40}
   .dd.open .dd-menu{display:block}
   .dd-menu a{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;font-size:13px;color:#3a3e46;cursor:pointer}
   .dd-menu a:hover{background:#f6f7f9}
@@ -301,10 +339,17 @@
   .btn{height:38px;padding:0 16px;border-radius:9px;border:none;font-size:12.5px;font-weight:700;cursor:pointer;
     display:inline-flex;align-items:center;gap:7px;font-family:inherit;transition:.15s}
   .btn:active{transform:translateY(1px)}
-  .btn-ghost{background:var(--panel);border:1.5px solid var(--pink);color:var(--pink)}
-  .btn-pink{background:var(--grad);color:#fff;box-shadow:0 4px 14px rgba(255,31,142,.32)}
+  .btn-ghost{background:var(--panel);border:1px solid var(--border-strong);color:var(--text-primary)}
+  .btn-ghost:hover{border-color:var(--text-muted);background:var(--surface-sunken)}
+  .btn-pink{background:var(--grad);color:#fff;box-shadow:var(--sh-1)}
+  .btn-pink:hover{filter:brightness(1.04)}
+  .btn-danger{background:var(--panel);border:1px solid var(--danger-border);color:var(--danger)}
+  .btn-danger:hover{background:var(--danger-bg)}
   .btn-dark{background:#0c0c0d;color:#fff}
   .btn-sm{height:32px;padding:0 13px;font-size:11.5px;border-radius:8px}
+  .btn:focus-visible{outline:none;box-shadow:0 0 0 3px var(--brand-ring)}
+  .ctrl-sel:focus,.dd-btn:focus-visible,.inp input:focus,.inp select:focus,.saque-inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--brand-ring)}
+  .search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--brand-ring)}
   .btn-act{background:var(--grad);color:#fff;border:2px solid #0a0a0b;box-shadow:3px 3px 0 #0a0a0b;border-radius:8px;height:32px;padding:0 16px;font-family:inherit;font-weight:700;font-size:11.5px;cursor:pointer}
   .btn-act:active{transform:translate(3px,3px);box-shadow:none}
 
@@ -399,19 +444,19 @@
   .lc-foot{display:flex;justify-content:flex-end;padding:8px 18px 12px;font-size:9px;color:var(--soft);font-style:italic;letter-spacing:.5px}
 
   /* table */
-  .tablewrap{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);border:2px solid var(--pink);overflow:hidden}
+  .tablewrap{background:var(--panel);border-radius:var(--radius);box-shadow:var(--sh-1);border:1px solid var(--line);overflow:hidden}
   table{width:100%;border-collapse:collapse;font-size:12.5px}
-  thead th{text-align:left;padding:14px 16px;font-style:italic;color:#5a5f68;font-weight:700;border-bottom:2px solid var(--pink);white-space:nowrap}
-  tbody td{padding:14px 16px;border-bottom:1px solid var(--line);color:#41454d;vertical-align:middle}
+  thead th{text-align:left;padding:11px 16px;color:var(--text-secondary);font-weight:600;font-size:11.5px;letter-spacing:.2px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-sunken)}
+  tbody td{padding:11px 16px;border-bottom:1px solid var(--line2);color:var(--text-secondary);vertical-align:middle}
   tbody tr:last-child td{border-bottom:none}
   tbody tr.click{cursor:pointer;transition:.12s}
-  tbody tr.click:hover{background:#fff5fa}
-  .uuid{font-weight:800;font-style:italic}
+  tbody tr.click:hover{background:var(--surface-sunken)}
+  .uuid{font-weight:700}
   .sub{font-size:11px;color:var(--muted);display:block;margin-top:2px}
   .track{color:var(--green);font-weight:700}
 
-  .tag{display:inline-flex;align-items:center;justify-content:center;padding:5px 14px;border-radius:20px;
-    font-size:11px;font-weight:700;border:1.5px solid}
+  .tag{display:inline-flex;align-items:center;justify-content:center;padding:3px 10px;border-radius:var(--r-pill);
+    font-size:11px;font-weight:600;border:1px solid}
   .t-green{background:var(--green-bg);color:var(--green);border-color:var(--green-bd)}
   .t-amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-bd)}
   .t-orange{background:var(--orange-bg);color:var(--orange);border-color:var(--orange-bd)}
@@ -423,11 +468,11 @@
   .pager button{min-width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--panel);
     font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;color:#41454d}
   .pager button.on{background:var(--grad);color:#fff;border-color:transparent}
-  .pager button.nx{width:auto;padding:0 14px;color:var(--pink);border-color:var(--pink)}
+  .pager button.nx{width:auto;padding:0 14px;color:var(--text-primary);border-color:var(--border-strong)}
 
   /* order detail */
   .det-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px}
-  .sec-t{display:flex;align-items:center;gap:8px;font-weight:800;font-style:italic;font-size:14px;margin-bottom:3px;color:#16181d}
+  .sec-t{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;letter-spacing:.2px;text-transform:uppercase;margin-bottom:3px;color:var(--text-secondary)}
   .sec-t.pink{color:var(--pink)}
   .sec-sub{font-size:11px;font-style:italic;color:var(--soft);margin-bottom:14px}
   .kv{font-size:12.5px;line-height:2.05;color:#3a3e46}
@@ -448,7 +493,7 @@
   .det-sit:empty{display:none}
   .track-steps{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
   .ts{flex:1;min-width:120px;border:1px solid var(--line);border-radius:11px;padding:13px}
-  .ts.active{border:1.5px solid var(--pink);background:#fff5fa}
+  .ts.active{border:1.5px solid var(--pink);background:var(--accent-soft)}
   .ts-n{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:var(--soft);font-size:13px;margin-bottom:8px}
   .ts-n span{font-size:9px;background:#eef0f4;color:#9aa0a8;padding:2px 7px;border-radius:5px;font-weight:700}
   .ts.active .ts-n{color:var(--pink)}
@@ -463,9 +508,9 @@
   .cart .cols{display:flex;gap:34px}
   .cart .cols div span{display:block;font-size:10px;color:var(--soft);text-transform:uppercase;font-style:italic;letter-spacing:.4px}
   .cart .cols div b{font-size:14px;font-weight:800}
-  .track-box{background:var(--grad-soft);border:1px dashed var(--pink);border-radius:10px;padding:14px;margin-bottom:12px}
-  .track-box .lab{font-size:11px;color:#a23a73;font-style:italic;margin-bottom:4px}
-  .track-box .code{color:var(--pink);font-weight:800;letter-spacing:.5px}
+  .track-box{background:var(--surface-sunken);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+  .track-box .lab{font-size:11px;color:var(--text-muted);margin-bottom:4px}
+  .track-box .code{color:var(--accent);font-weight:700;letter-spacing:.3px}
 
   /* generic */
   .stat-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
@@ -479,7 +524,7 @@
   .prodcard .pc{font-size:11px;color:var(--soft);margin:2px 0 10px}
   .prodcard .row{display:flex;justify-content:space-between;align-items:center}
   .prodcard .price{font-size:17px;font-weight:800}
-  .ref-link{display:flex;gap:10px;align-items:center;background:#faf0f6;border:1px dashed var(--pink);border-radius:11px;
+  .ref-link{display:flex;gap:10px;align-items:center;background:var(--accent-soft);border:1px dashed var(--accent-border);border-radius:11px;
     padding:14px 16px;margin:14px 0}
   .ref-link code{flex:1;color:var(--pink);font-weight:700;font-size:13px}
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
@@ -511,8 +556,8 @@
   .toast .dot{width:8px;height:8px;border-radius:50%;background:var(--pink)}
   .overlay{position:fixed;inset:0;background:rgba(8,8,12,.55);display:none;align-items:center;justify-content:center;z-index:90;backdrop-filter:blur(2px)}
   .overlay.show{display:flex}
-  .modal{background:var(--panel);border-radius:18px;width:420px;max-width:92vw;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.4);
-    border:2px solid var(--pink)}
+  .modal{background:var(--panel);border-radius:var(--r-lg);width:420px;max-width:92vw;padding:24px;box-shadow:var(--sh-pop);
+    border:1px solid var(--line)}
   .modal h3{font-style:italic;font-weight:800;font-size:18px;margin-bottom:4px}
   .modal p.s{color:var(--muted);font-size:12.5px;margin-bottom:18px}
   .modal .big-av{text-align:center;font-size:30px;font-weight:800;margin:8px 0 18px}
@@ -543,7 +588,7 @@
   .fil-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;align-items:center}
   .fil-chips:empty{display:none}
   .fil-chips .show-c{font-size:12px;color:var(--soft);margin-right:4px}
-  .chip{display:inline-flex;align-items:center;gap:7px;background:#ffe3f0;color:#b51e72;border:1px solid #ffc6e0;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:var(--accent-soft);color:var(--brand-700);border:1px solid var(--accent-border);border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600}
   .chip .x{cursor:pointer;font-weight:800;opacity:.65}
   .chip .x:hover{opacity:1}
   body.dark .chip{background:rgba(255,31,142,.14);border-color:rgba(255,31,142,.32);color:#ff8fc4}
@@ -593,7 +638,7 @@
   .disp-tabs button{border:none;background:transparent;font-family:inherit;font-size:12.5px;font-weight:700;color:#8b909a;padding:8px 14px;border-radius:8px;cursor:pointer}
   .disp-tabs button.on{background:#e7f7ee;color:#129a4d}
   .icobtn{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:#6b7079;margin-left:4px;vertical-align:middle}
-  .icobtn:hover{background:#fff5fa;color:#ff1f8e;border-color:var(--pink)}
+  .icobtn:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
   .icobtn svg{width:15px;height:15px}
   .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#5b616b;white-space:nowrap}
   /* ===== produtos (abas + tabela) ===== */
@@ -727,7 +772,7 @@
   /* ===== clientes ===== */
   .ctag{display:inline-block;font-size:8.5px;font-weight:800;padding:2px 6px;border-radius:5px;margin-right:4px;text-transform:uppercase;letter-spacing:.3px;vertical-align:middle}
   .ctag.vip{background:var(--grad);color:#fff}
-  .ctag.rec{background:#ffe3f0;color:#ff1f8e}
+  .ctag.rec{background:var(--accent-soft);color:var(--accent)}
   .ctag.top{background:#fff5dc;color:#b9820a}
   .mini-stat{display:flex;justify-content:space-between;align-items:center}
   .mini-stat .lab{font-size:11px;font-style:italic;color:var(--muted)}
@@ -1091,7 +1136,7 @@
   .sp-store .si b{display:block;font-size:13px;font-weight:700;color:#16181d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .sp-store .si span{font-size:11px;color:#8b8f99}
   .sp-store .sp-chk{margin-left:auto;color:var(--pink);font-weight:800;flex:0 0 auto}
-  .sp-store.sel{background:#fff0f6}
+  .sp-store.sel{background:var(--accent-soft)}
   .store-pop .sp-div+a{border-top:none}
   body.dark .sp-store .si b{color:#ececee}
   body.dark .sp-store.sel{background:rgba(255,31,142,.14)}
@@ -1161,7 +1206,7 @@
   .tk-panel .tablewrap{box-shadow:none;border:none;border-radius:0}
   .tk-panel thead th{border-bottom:1px solid var(--line);background:var(--surface);color:var(--soft);font-size:11.5px}
   .tk-panel tbody tr{transition:.12s}
-  .tk-panel tbody tr:hover{background:#fff5fa}
+  .tk-panel tbody tr:hover{background:var(--accent-soft)}
   body.dark .tk-panel thead th{background:#1d1d20}
   body.dark .tk-panel tbody tr:hover{background:#1f1f24}
   .trash{background:none;border:none;cursor:pointer;color:#6b7079}
@@ -1520,7 +1565,7 @@
 
       <div class="kpis" style="grid-template-columns:repeat(6,1fr)">
         <div class="card kpi">
-          <div class="top"><span class="lab">Volume de Vendas</span><span class="badge-ic" style="background:#ffe3f0"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><path d="M3 13h4v8H3zM10 3h4v18h-4zM17 9h4v12h-4z"/></svg></span></div>
+          <div class="top"><span class="lab">Volume de Vendas</span><span class="badge-ic" style="background:var(--accent-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><path d="M3 13h4v8H3zM10 3h4v18h-4zM17 9h4v12h-4z"/></svg></span></div>
           <div class="val">R$ 134.420,00</div><div class="note">2.948 vendas pagas</div><div class="kpi-rev"><span>Valor líquido</span><b>R$ 128.640,00</b></div><div class="delta up">↗ 20% vs período anterior</div>
         </div>
         <div class="card kpi">
@@ -1532,7 +1577,7 @@
           <div class="val">41,91%</div><div class="note">2.948 de 7.035 pagos</div><div class="kpi-rev"><span>Recuperados</span><b>312</b></div><div class="delta up">↗ 4% vs período anterior</div>
         </div>
         <div class="card kpi">
-          <div class="top"><span class="lab">Conversão Pix</span><span class="badge-ic" style="background:#ffe3f0"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 18h6"/></svg></span></div>
+          <div class="top"><span class="lab">Conversão Pix</span><span class="badge-ic" style="background:var(--accent-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 18h6"/></svg></span></div>
           <div class="val">60,11%</div><div class="note">1.409 de 2.345 pagos</div><div class="kpi-rev"><span>Faturamento</span><b>R$ 64.250,40</b></div><div class="delta down">↘ 1% vs período anterior</div>
         </div>
         <div class="card kpi">
@@ -1600,22 +1645,83 @@
     <!-- ===== PEDIDOS ===== -->
     <section class="page" id="page-pedidos">
       <div class="head"><h1>Pedidos</h1><p>Gerencie seus pedidos</p></div>
+      <!-- ===== PEDIDOS — INÍCIO (filtros / colunas / seleção / tabela / paginação) ===== -->
+      <style id="pedidosCSS">
+        #page-pedidos .ped-morewrap{position:relative;display:inline-block}
+        #page-pedidos #pedMoreFilters{display:none;position:absolute;top:calc(100% + 8px);left:0;z-index:50;margin:0;width:380px;max-width:92vw;padding:14px;grid-template-columns:1fr 1fr;gap:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.14)}
+        #page-pedidos #pedMoreFilters.show{display:grid}
+        #page-pedidos #pedMoreFilters .field{min-width:0}
+        #page-pedidos #pedMoreFilters .dd,#page-pedidos #pedMoreFilters .ped-date{width:100%}
+        @media(max-width:560px){#page-pedidos #pedMoreFilters{grid-template-columns:1fr;width:min(320px,92vw)}}
+        #page-pedidos .ped-colmenu{position:relative;display:inline-block}
+        #page-pedidos .ped-colpop{display:none;position:absolute;right:0;top:calc(100% + 6px);z-index:40;min-width:200px;padding:8px}
+        #page-pedidos .ped-colpop.show{display:block}
+        #page-pedidos .ped-colpop label{display:flex;align-items:center;gap:8px;padding:6px 8px;font-size:13px;cursor:pointer;border-radius:7px}
+        #page-pedidos #pedBulkBar{display:none;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0;padding:10px 14px}
+        #page-pedidos #pedBulkBar.show{display:flex}
+        #page-pedidos #pedBulkBar .bk-count{font-weight:700;font-size:13px}
+        #page-pedidos table .ped-ck{width:34px;text-align:center}
+        #page-pedidos .ped-date{height:38px;border:1px solid var(--line);border-radius:9px;padding:0 10px;background:transparent;color:inherit;font:inherit}
+        #page-pedidos #pedFilters{justify-content:space-between;gap:14px}
+        #page-pedidos .ped-tb-right{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+        #page-pedidos #filChips{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;width:100%;margin:2px 0 12px}
+        #page-pedidos .ped-chips-left{flex:1 1 auto;min-width:0}
+        #page-pedidos .ped-chips-count{flex:0 0 auto}
+        #page-pedidos #filChips:empty{display:none}
+        #page-pedidos .ped-chips-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+        #page-pedidos .ped-chips-count{margin-left:auto;font-size:12px;color:var(--soft);white-space:nowrap}
+        #page-pedidos .ped-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;line-height:1;padding:5px 8px;border-radius:8px;background:#fff5f9;border:1px solid #f4c6da;color:#7a3a55}
+        #page-pedidos .ped-chip b{font-weight:600;color:#9a4566}
+        #page-pedidos .ped-chip-x{border:none;background:transparent;cursor:pointer;font-size:11px;line-height:1;color:#c98aa6;padding:0 1px}
+        #page-pedidos .ped-chip-x:hover{color:var(--brand-700)}
+        #page-pedidos .ped-clearlink{border:none;background:transparent;cursor:pointer;font-size:12px;color:var(--soft);text-decoration:underline;padding:2px 4px}
+        #page-pedidos .ped-clearlink:hover{color:var(--brand-700)}
+        #page-pedidos .ped-statusmenu{position:relative;display:inline-block}
+        #page-pedidos .ped-statuspop{display:none;position:absolute;right:0;top:calc(100% + 6px);z-index:50;min-width:180px;padding:6px}
+        #page-pedidos .ped-statuspop.show{display:block}
+        #page-pedidos .ped-statuspop button{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;border:none;background:transparent;cursor:pointer;font-size:13px;padding:7px 9px;border-radius:7px;color:inherit}
+        #page-pedidos .ped-statuspop button:hover{background:rgba(0,0,0,.05)}
+        #page-pedidos .ped-sens{color:#c0264b;font-weight:700}
+        #page-pedidos .ped-danger{background:#fff;border:1px solid #e7a3b4;color:#c0264b}
+        #page-pedidos .ped-danger:hover{background:#fff0f3;border-color:#d98098}
+        #page-pedidos .ped-clearsel{color:var(--soft)}
+        #page-pedidos #pedidosBody tr.sel{background:#fff5f9}
+      </style>
       <div class="filters" id="pedFilters">
-        <div class="field f-search"><label>Buscar</label><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><input placeholder="Buscar por E2E, UUID, Nome, CPF, Telefone…"></div></div>
+        <div class="field f-search"><label>Buscar</label><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><input id="pedSearch" placeholder="Buscar por E2E, Pedido, Nome, CPF, Telefone…"></div></div>
         <div class="field"><label>Status</label><select class="ctrl-sel ped-fil" data-k="status"><option>Todos</option><option>Processando</option><option>Pendente</option><option>Pago</option><option>Recusado</option><option>Reembolso</option><option>Cancelado</option><option>Expirado</option><option>MED</option><option>Disputa</option><option>Chargeback</option></select></div>
         <div class="field"><label>Tipo de pagamento</label><select class="ctrl-sel ped-fil" data-k="pag"><option>Todos</option><option>PIX</option><option>Cartão</option><option>Boleto</option></select></div>
-        <div class="field sec"><label>Tipo de produto</label><select class="ctrl-sel ped-fil" data-k="prod"><option>Todos</option><option>Físico</option><option>Digital</option></select></div>
-        <div class="field sec"><label>Rastreio</label><select class="ctrl-sel ped-fil" data-k="rastreio"><option>Todos</option><option>Com rastreio</option><option>Sem rastreio</option></select></div>
-        <div class="field sec"><label>Origem</label><select class="ctrl-sel ped-fil" data-k="origem"><option>Todas</option><option>Checkout Marcha</option><option>Zedy</option><option>VIP Gram</option><option>API</option><option>Corvex</option><option>Luna Checkout</option><option>Shark Bot</option></select></div>
-        <div class="field sec"><label>Parcelas</label><select class="ctrl-sel ped-fil" data-k="parcelas"><option>Todas</option><option>1x</option><option>2x</option><option>3x</option><option>4x</option><option>5x</option><option>6x</option><option>7x</option><option>8x</option><option>9x</option><option>10x</option><option>11x</option><option>12x</option></select></div>
-        <div class="field"><label>Período</label><select class="ctrl-sel"><option>Hoje</option><option>Ontem</option><option>Esse mês</option><option>Últimos 30 dias</option><option selected>Todas</option></select></div>
-        <div class="field sec"><label>Data</label><div class="ctrl" onclick="openCal(this,event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Selecione um período</div></div>
+        <div class="field"><label>Período</label><select class="ctrl-sel" id="pedPeriodo"><option>Hoje</option><option>Ontem</option><option>7 dias</option><option>14 dias</option><option>30 dias</option><option>Esse mês</option><option>Mês passado</option><option selected>Todas</option></select></div>
+        <div class="ped-morewrap">
+          <button class="btn btn-ghost" id="pedMoreBtn" onclick="pedToggleMore(event)">⚙ Mais filtros</button>
+          <div class="filters card" id="pedMoreFilters" onclick="event.stopPropagation()">
+            <div class="field"><label>Tipo de produto</label><select class="ctrl-sel ped-fil" data-k="prod"><option>Todos</option><option>Físico</option><option>Digital</option></select></div>
+            <div class="field"><label>Rastreio</label><select class="ctrl-sel ped-fil" data-k="rastreio"><option>Todos</option><option>Com rastreio</option><option>Sem rastreio</option></select></div>
+            <div class="field"><label>Origem</label><select class="ctrl-sel ped-fil" data-k="origem"><option>Todas</option><option>Checkout Marcha</option><option>Zedy</option><option>VIP Gram</option><option>API</option><option>Corvex</option><option>Luna Checkout</option><option>Shark Bot</option></select></div>
+            <div class="field"><label>Parcelas</label><select class="ctrl-sel ped-fil" data-k="parcelas"><option>Todas</option><option>1x</option><option>2x</option><option>3x</option><option>4x</option><option>5x</option><option>6x</option><option>7x</option><option>8x</option><option>9x</option><option>10x</option><option>11x</option><option>12x</option></select></div>
+            <div class="field"><label>Data de</label><input type="date" class="ped-date" id="pedDateFrom"></div>
+            <div class="field"><label>Data até</label><input type="date" class="ped-date" id="pedDateTo"></div>
+          </div>
+        </div>
         <div class="grow"></div>
-        <button class="ic-btn" id="clearFilBtn" onclick="clearPedFilters()" title="Limpar filtros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg></button>
-        <button class="btn btn-ghost" onclick="openReport()">📋 Gerar Relatório</button>
-        <button class="btn btn-pink" onclick="toast('Exportando…')">Exportar</button>
+        <div class="ped-tb-right">
+          <div class="ped-colmenu"><button class="btn btn-ghost" onclick="pedToggleColMenu(event)">☰ Colunas</button><div class="ped-colpop card" id="pedColPop" onclick="event.stopPropagation()"></div></div>
+          <button class="btn btn-ghost" id="pedRefreshBtn" onclick="pedRefreshOrClear()" title="Atualizar lista">↻ Atualizar</button>
+          <button class="btn btn-ghost" onclick="openReport()">📋 Gerar relatório</button>
+          <button class="btn btn-pink" onclick="exportPedidosCSV()">Exportar CSV</button>
+        </div>
       </div>
       <div class="fil-chips" id="filChips"></div>
+      <div id="pedBulkBar" class="card">
+        <span class="bk-count" id="pedBulkCount">0 pedidos selecionados</span>
+        <div class="grow"></div>
+        <button class="btn btn-ghost btn-sm" onclick="bulkExportSelected()">Exportar selecionados</button>
+        <div class="ped-statusmenu"><button class="btn btn-ghost btn-sm" onclick="pedToggleStatusMenu(event)">Alterar status ▾</button><div class="ped-statuspop card" id="pedStatusPop" onclick="event.stopPropagation()"></div></div>
+        <button class="btn btn-ghost btn-sm" onclick="bulkMarkShipped()">Marcar como enviado</button>
+        <button class="btn btn-ghost btn-sm" onclick="openTrackModal()">Adicionar rastreio</button>
+        <button class="btn btn-sm ped-danger" id="pedBulkRefund" onclick="bulkRefund()">Reembolsar selecionados</button>
+        <button class="btn btn-ghost btn-sm ped-clearsel" onclick="pedClearSel()">Limpar seleção</button>
+      </div>
       <div class="tablewrap">
         <table>
           <thead id="pedThead"></thead>
@@ -1624,44 +1730,60 @@
       </div>
       <div class="tfoot">
         <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:12px;font-style:italic;color:#5a5f68">Pedidos por página</span><select class="ctrl-sel" style="min-width:78px;height:34px"><option>25</option><option>50</option><option>100</option><option>200</option></select></div>
-          <div class="info">Mostrando 1 até 25 de 25 Pedidos</div>
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:12px;font-style:italic;color:#5a5f68">Pedidos por página</span><select class="ctrl-sel" id="pedPageSize" style="min-width:78px;height:34px"><option>25</option><option>50</option><option>100</option><option>200</option></select></div>
+          <div class="info" id="pedInfo">Mostrando 0 de 0 Pedidos</div>
         </div>
-        <div class="pager"><button>‹</button><button class="on">1</button><button>2</button><button>3</button><button>…</button><button>10</button><button class="nx">Próximo ›</button></div>
+        <div class="pager" id="pedPager"></div>
       </div>
+      <!-- ===== PEDIDOS — FIM ===== -->
     </section>
 
     <!-- ===== PEDIDO DETALHE ===== -->
     <section class="page" id="page-detalhe">
+      <style id="detalheCSS">
+        #page-detalhe .det-header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:6px 0 10px}
+        #page-detalhe .det-header h1{margin:0}
+        #page-detalhe .det-header .det-head-sub{margin:2px 0 0;font-size:12px;color:var(--soft)}
+        #page-detalhe #detActions{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start}
+        #page-detalhe #detSit{display:inline-block;padding:8px 12px;border-radius:9px;font-size:13px;margin-bottom:14px;font-weight:600}
+        #page-detalhe .det-acc{padding:0;margin-top:14px;overflow:hidden}
+        #page-detalhe .det-acc>summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+        #page-detalhe .det-acc>summary::-webkit-details-marker{display:none}
+        #page-detalhe .det-acc>summary::after{content:'▾';color:var(--soft);transition:transform .2s}
+        #page-detalhe .det-acc[open]>summary::after{transform:rotate(180deg)}
+        #page-detalhe .det-acc .det-acc-body{padding:0 16px 16px}
+      </style>
       <button class="back" onclick="go('pedidos')">‹ Voltar para pedidos</button>
-      <div class="head"><h1 id="detUuid">Pedido ID #25-2585</h1><p>Pedido feito em 28/04/2025 às 12:12:12</p></div>
+      <!-- header compacto: ID + data + ações principais -->
+      <div class="det-header">
+        <div><h1 id="detUuid">Pedido ID #25-2585</h1><div class="det-head-sub">Pedido feito em 28/04/2025 às 12:12:12</div></div>
+        <div class="det-actions" id="detActions"></div>
+      </div>
+      <!-- banner de status compacto -->
       <div id="detSit" class="det-sit"></div>
+      <!-- primeira dobra: Cliente · Pagamento · Resumo financeiro -->
       <div class="card" style="margin-bottom:14px">
         <div class="det-grid">
           <div>
-            <div class="sec-t pink"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>INFORMAÇÕES DO CLIENTE</div>
+            <div class="sec-t pink"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>CLIENTE</div>
             <div class="sec-sub">Dados do cliente referente ao Pedido #25-2585</div>
             <div class="kv">
               Nome completo: <b id="detCliente">Fabiano da Silva Luciano Hulk</b><br>
               CPF: <b>000.000.000-00</b><br>
               Email: <b>bananavoadora@gmail.com</b><br>
               Telefone: <b>(11) 98663-8528</b><br>
-              Endereço: <b>Avenida Celso Garcia</b><br>
-              Número: <b>1907</b><br>
-              Complemento: <b>Bloco 44</b><br>
-              Bairro: <b>Brás</b><br>
-              Cidade/UF: <b>São Paulo/SP</b><br>
-              CEP: <b>03015-000</b><br>
-              IP: <b>133.0.176.19</b>
+              Endereço: <b>Avenida Celso Garcia, 1907 · Bloco 44 · Brás · São Paulo/SP · 03015-000</b><br>
+              IP: <b>133.0.176.19</b><br>
+              ID do cliente: <b>#CLI-2585</b>
             </div>
           </div>
           <div>
-            <div class="sec-t">Forma de pagamento</div>
-            <div style="margin:12px 0"><span class="tag t-red" id="detPagTag" style="background:#ffe3f0;color:#ff1f8e;border-color:#f4b6cb">Cartão</span> <span id="detPagDesc" style="font-size:12px;color:#6b7079"></span></div>
+            <div class="sec-t">PAGAMENTO</div>
+            <div style="margin:12px 0"><span class="tag" id="detPagTag" style="background:var(--neutral-bg);color:var(--text-primary);border-color:var(--neutral-border)">Cartão</span> <span id="detPagDesc" style="font-size:12px;color:#6b7079"></span></div>
             <div class="kv" id="detPagInfo"></div>
           </div>
           <div>
-            <div class="sec-t">Resumo do pedido</div>
+            <div class="sec-t">RESUMO FINANCEIRO</div>
             <div style="margin-top:12px">
               <div class="res-row"><span>Subtotal dos itens</span><span>R$ 1.406,00</span></div>
               <div class="res-row"><span>Frete e manuseio</span><span>+ R$ 12,00</span></div>
@@ -1671,41 +1793,6 @@
               <div class="res-row pink"><span>Comissão do afiliado</span><span>− R$ 56,00</span></div>
               <div class="res-row pink"><span>Taxa</span><span>− R$ 56,00</span></div>
               <div class="res-net"><div><span>Você recebe</span><div class="sub">Total líquido</div></div><b>R$ 1.294,00</b></div>
-            </div>
-            <div class="det-actions" id="detActions"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card" style="margin-bottom:14px">
-        <div class="det-grid">
-          <div>
-            <div class="sec-t">Financeiro da transação</div>
-            <div class="kv" style="margin-top:12px">
-              Valor bruto: <b id="detVBruto">R$ 120,00</b><br>
-              Taxa cobrada: <b>R$ 4,88</b><br>
-              Custo de adquirência: <b>R$ 0,40</b><br>
-              Custo de comissão: <b>R$ 0,00</b><br>
-              Lucro: <b style="color:var(--green)">R$ 4,48</b>
-            </div>
-          </div>
-          <div>
-            <div class="sec-t">Dados técnicos</div>
-            <div class="kv" style="margin-top:12px">
-              Adquirente: <b>Pluggou_V2</b><br>
-              ID na adquirente: <b style="word-break:break-all;font-size:11.5px">66003dad-27c3-4cef-bfb7-550f177050c3</b><br>
-              ID da transação: <b id="detTxId">44326465</b><br>
-              Referência externa: <b id="detRefExt">TELEGRAM_1780454725</b><br>
-              Criada em: <b id="detCriada">—</b><br>
-              Última atualização: <b id="detAtualiza">—</b>
-            </div>
-          </div>
-          <div>
-            <div class="sec-t">Status &amp; datas</div>
-            <div class="kv" style="margin-top:12px">
-              Pago em: <b id="detPagoEm">Não informado</b><br>
-              Estornado em: <b id="detEstornoEm">Não informado</b><br>
-              IP do cliente: <b>119.63.97.137</b><br>
-              Comissão de afiliado: <b>R$ 56,00</b>
             </div>
           </div>
         </div>
@@ -1755,6 +1842,7 @@
         </div>
       </div>
 
+      <!-- andamento: timeline -->
       <div class="card" style="margin-top:14px">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><div class="sec-t" style="margin:0">Andamento do pedido</div><div class="sec-sub" style="margin:0">Acompanhe a evolução do pedido até a conclusão</div></div><span class="tag t-amber">Pendente</span></div>
         <div class="track-steps">
@@ -1766,27 +1854,72 @@
         </div>
       </div>
 
-      <div class="card" style="margin-top:14px">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><div class="sec-t" style="margin:0">Tentativas de processamento</div><div class="sec-sub" style="margin:0">Histórico de pagamento por adquirente, tentativa e horário</div></div><span class="tag t-red" style="background:#ffe3f0;color:#ff1f8e;border:none">1 tentativa</span></div>
-        <div style="border:1px solid var(--line);border-radius:11px;padding:14px;margin-top:12px">
-          <div style="display:flex;align-items:center;gap:8px"><b>MarchaPay</b> <span class="tag t-green" style="font-size:10px">✓ Adquirente final</span></div>
-          <div style="font-size:12px;color:var(--soft);margin-top:6px">Tentativa #1 · 24/05/25 12:30 · 12:30:37</div>
+      <!-- secundário: dados técnicos e financeiros (colapsável) -->
+      <details class="card det-acc">
+        <summary>Dados técnicos e financeiros</summary>
+        <div class="det-acc-body">
+          <div class="det-grid">
+            <div>
+              <div class="sec-t">Financeiro da transação</div>
+              <div class="kv" style="margin-top:12px">
+                Valor bruto: <b id="detVBruto">R$ 120,00</b><br>
+                Taxa cobrada: <b>R$ 4,88</b><br>
+                Custo de adquirência: <b>R$ 0,40</b><br>
+                Custo de comissão: <b>R$ 0,00</b><br>
+                Lucro: <b style="color:var(--green)">R$ 4,48</b>
+              </div>
+            </div>
+            <div>
+              <div class="sec-t">Dados técnicos</div>
+              <div class="kv" style="margin-top:12px">
+                Adquirente: <b>Pluggou_V2</b><br>
+                ID na adquirente: <b style="word-break:break-all;font-size:11.5px">66003dad-27c3-4cef-bfb7-550f177050c3</b><br>
+                ID da transação: <b id="detTxId">44326465</b><br>
+                Referência externa: <b id="detRefExt">TELEGRAM_1780454725</b><br>
+                Criada em: <b id="detCriada">—</b><br>
+                Última atualização: <b id="detAtualiza">—</b>
+              </div>
+            </div>
+            <div>
+              <div class="sec-t">Status &amp; datas</div>
+              <div class="kv" style="margin-top:12px">
+                Pago em: <b id="detPagoEm">Não informado</b><br>
+                Estornado em: <b id="detEstornoEm">Não informado</b><br>
+                IP do cliente: <b>119.63.97.137</b><br>
+                Comissão de afiliado: <b>R$ 56,00</b>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </details>
 
-      <div class="card" style="margin-top:14px">
-        <div class="sec-t" style="margin:0">Metadados</div>
-        <div class="sec-sub" style="margin:0">Dados extras enviados na criação da transação</div>
-        <div style="border:1px solid var(--line);border-radius:11px;padding:14px;margin-top:12px;font-size:13px"><span style="color:var(--soft)">Provedor Nome:</span> <b id="detMeta">Depósito</b></div>
-      </div>
+      <!-- secundário: tentativas de processamento (colapsável) -->
+      <details class="card det-acc">
+        <summary>Tentativas de processamento (1)</summary>
+        <div class="det-acc-body">
+          <div style="border:1px solid var(--line);border-radius:11px;padding:14px">
+            <div style="display:flex;align-items:center;gap:8px"><b>MarchaPay</b> <span class="tag t-green" style="font-size:10px">✓ Adquirente final</span></div>
+            <div style="font-size:12px;color:var(--soft);margin-top:6px">Tentativa #1 · 24/05/25 12:30 · retorno: aprovado</div>
+          </div>
+        </div>
+      </details>
+
+      <!-- secundário: metadados (colapsável, por último) -->
+      <details class="card det-acc">
+        <summary>Metadados</summary>
+        <div class="det-acc-body">
+          <div class="sec-sub" style="margin:0 0 10px">Dados extras enviados na criação da transação</div>
+          <div style="border:1px solid var(--line);border-radius:11px;padding:14px;font-size:13px"><span style="color:var(--soft)">Provedor Nome:</span> <b id="detMeta">Depósito</b></div>
+        </div>
+      </details>
     </section>
 
     <!-- ===== FINANCEIRO ===== -->
     <section class="page" id="page-financeiro">
       <div class="head"><h1>Financeiro</h1><p>Saldos, saques, antecipações e extrato da sua conta</p></div>
       <div class="kpis" style="grid-template-columns:repeat(6,1fr)">
-        <div class="card kpi"><div class="top"><span class="lab">Disponível para saque</span><span class="badge-ic" style="background:#ffe3f0"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><rect x="3" y="6" width="18" height="13" rx="2"/></svg></span></div><div class="val">R$ 14.250,30</div><div class="note">Limite diário R$ 14.250,30 / R$ 20.000,00 · noturno R$ 1.000,00</div><button class="btn btn-pink btn-sm pill-saque" onclick="openSaque()">Solicitar Saque</button></div>
-        <div class="card kpi"><div class="top"><span class="lab">Disponível para antecipação</span><span class="badge-ic" style="background:#ffe3f0"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><path d="M13 2 3 14h8l-1 8 10-12h-8z"/></svg></span></div><div class="val">R$ 12.430,00</div><div class="note">Recebíveis disponíveis para antecipar</div><button class="btn btn-pink btn-sm pill-saque" onclick="openAntecip()">Antecipar</button></div>
+        <div class="card kpi"><div class="top"><span class="lab">Disponível para saque</span><span class="badge-ic" style="background:var(--accent-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><rect x="3" y="6" width="18" height="13" rx="2"/></svg></span></div><div class="val">R$ 14.250,30</div><div class="note">Limite diário R$ 14.250,30 / R$ 20.000,00 · noturno R$ 1.000,00</div><button class="btn btn-pink btn-sm pill-saque" onclick="openSaque()">Solicitar Saque</button></div>
+        <div class="card kpi"><div class="top"><span class="lab">Disponível para antecipação</span><span class="badge-ic" style="background:var(--accent-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><path d="M13 2 3 14h8l-1 8 10-12h-8z"/></svg></span></div><div class="val">R$ 12.430,00</div><div class="note">Recebíveis disponíveis para antecipar</div><button class="btn btn-pink btn-sm pill-saque" onclick="openAntecip()">Antecipar</button></div>
         <div class="card kpi"><div class="top"><span class="lab">Saldo bloqueado em disputa</span><span class="badge-ic" style="background:#e7f7ee"><svg viewBox="0 0 24 24" fill="none" stroke="#129a4d"><path d="M12 2v20M5 5h14M5 19h14"/></svg></span></div><div class="val">R$ 48,79</div><div class="note">Retido por 2 disputas em aberto</div><button class="btn btn-pink btn-sm pill-saque" onclick="go('disputas')">Ver disputas</button></div>
         <div class="card kpi nofoot"><div class="top"><span class="lab">Total reservado</span><span class="badge-ic" style="background:#eef0f4"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7079"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></div><div class="val">R$ 2.450,00</div><div class="note">Reserva de risco da conta</div><div class="kpi-foot"><span>Período configurado</span><b>30 dias (D+30)</b></div></div>
         <div class="card kpi nofoot"><div class="top"><span class="lab">Total sacado</span><span class="badge-ic" style="background:#e7f7ee"><svg viewBox="0 0 24 24" fill="none" stroke="#129a4d"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div><div class="val">R$ 38.740,00</div><div class="note">Líquido sacado: R$ 37.245,00</div><div class="kpi-foot"><span>Total faturado</span><b>R$ 134.420,00</b></div></div>
@@ -2017,7 +2150,7 @@
           </div>
         </div>
         <div class="card">
-          <div style="display:flex;align-items:center;gap:10px"><span class="badge-ic" style="background:var(--grad-soft);width:38px;height:38px"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/></svg></span><div><b style="font-size:15px">Seu Progresso</b><div class="sec-sub" style="margin:0">Continue crescendo!</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="badge-ic" style="background:var(--grad-soft);width:38px;height:38px"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/></svg></span><div><b style="font-size:15px">Seu Progresso</b><div class="sec-sub" style="margin:0">Continue crescendo!</div></div></div>
           <div class="pg-grid">
             <div class="pg-mini"><div class="ic">💳</div><div class="l">FATURADO</div><div class="v">R$ 0,00</div></div>
             <div class="pg-mini"><div class="ic">🚩</div><div class="l">PRÓXIMA META</div><div class="v">R$ 10.000</div></div>
@@ -2221,7 +2354,7 @@
         <div class="grow"></div>        <button class="btn btn-dark" onclick="toast('Adicionar cliente')">+ Adicionar Cliente</button>
       </div>
       <div class="stat-3">
-        <div class="card cfg-card-pink mini-stat" style="margin:0"><div><div class="lab">Total de Clientes</div><div class="v">25</div></div><span class="badge-ic" style="background:#ffe3f0"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 6a3 3 0 0 1 0 6"/></svg></span></div>
+        <div class="card cfg-card-pink mini-stat" style="margin:0"><div><div class="lab">Total de Clientes</div><div class="v">25</div></div><span class="badge-ic" style="background:var(--accent-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 6a3 3 0 0 1 0 6"/></svg></span></div>
         <div class="card cfg-card-pink mini-stat" style="margin:0"><div><div class="lab">Total de Pedidos</div><div class="v">38</div></div><span class="badge-ic" style="background:#e7f0ff"><svg viewBox="0 0 24 24" fill="none" stroke="#2f7bff"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></span></div>
         <div class="card cfg-card-pink mini-stat" style="margin:0"><div><div class="lab">Total Faturamento</div><div class="v">R$ 12.230,00</div></div><span class="badge-ic" style="background:#e7f7ee"><svg viewBox="0 0 24 24" fill="none" stroke="#129a4d"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/></svg></span></div>
       </div>
@@ -2568,7 +2701,7 @@
       </div>
       <div data-sub="api" style="display:none">
         <div class="card" style="display:flex;align-items:center;gap:16px;border:1px solid var(--line);background:linear-gradient(100deg,#fff4fa,var(--panel) 55%);margin-bottom:16px;flex-wrap:wrap">
-          <span class="badge-ic" style="background:var(--grad-soft);width:44px;height:44px"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><path d="M8 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6z"/><path d="M8 13h8M8 17h6M13 3v6h6"/></svg></span>
+          <span class="badge-ic" style="background:var(--grad-soft);width:44px;height:44px"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><path d="M8 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6z"/><path d="M8 13h8M8 17h6M13 3v6h6"/></svg></span>
           <div style="flex:1;min-width:220px"><div class="sec-t" style="margin:0">Documentação para desenvolvedores</div><div class="sec-sub" style="margin:0">Quer integrar? Acesse a documentação, referência da API e guias de webhook da Marcha.</div></div>
           <button class="btn btn-ghost" onclick="toast('Abrindo referência da API…')">Referência da API</button>
           <button class="btn btn-pink" onclick="toast('Abrindo documentação…')">Acessar documentação →</button>
@@ -2688,7 +2821,7 @@
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeSaque()">
   <div class="modal" style="position:relative;width:440px">
     <button class="modal-x" onclick="closeSaque()">✕</button>
-    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg></span> SOLICITAR <span style="color:var(--pink)">SAQUE</span></div>
+    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg></span> SOLICITAR <span style="color:var(--pink)">SAQUE</span></div>
     <p class="s" style="margin:0 0 18px;padding-left:39px">Solicitação de Saque</p>
     <div style="display:flex;gap:12px;margin-bottom:16px">
       <div class="saldo-box"><span>Saldo disponível</span><b>R$ 14.250,30</b></div>
@@ -2718,7 +2851,7 @@
 <div class="overlay" id="pixModal" onclick="if(event.target===this)closePix()">
   <div class="modal" style="position:relative;width:420px">
     <button class="modal-x" onclick="closePix()">✕</button>
-    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg></span> CRIAR <span style="color:var(--pink)">CHAVE PIX</span></div>
+    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg></span> CRIAR <span style="color:var(--pink)">CHAVE PIX</span></div>
     <p class="s" style="margin:0 0 18px;padding-left:39px">Informe a chave pix</p>
     <div class="nb-lab" style="margin:0 0 6px">Apelido da chave</div>
     <input id="pixAp" class="saque-inp" placeholder="Apelido da chave">
@@ -2758,7 +2891,7 @@
 <div class="overlay" id="indicarModal" onclick="if(event.target===this)closeIndicar()">
   <div class="modal" style="position:relative;width:440px">
     <button class="modal-x" onclick="closeIndicar()">✕</button>
-    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><circle cx="9" cy="7" r="3"/><path d="M3 21a6 6 0 0 1 12 0M16 3.5a3 3 0 0 1 0 7M22 21a6 6 0 0 0-5-5.9"/></svg></span> INDICAR <span style="color:var(--pink)">USUÁRIO</span></div>
+    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><circle cx="9" cy="7" r="3"/><path d="M3 21a6 6 0 0 1 12 0M16 3.5a3 3 0 0 1 0 7M22 21a6 6 0 0 0-5-5.9"/></svg></span> INDICAR <span style="color:var(--pink)">USUÁRIO</span></div>
     <p class="s" style="margin:0 0 18px;padding-left:39px">Adicione novos parceiros à sua rede</p>
     <div class="nb-lab" style="margin:0 0 6px">Nome do indicado <span style="color:var(--pink)">*</span></div>
     <input id="indNome" class="saque-inp" placeholder="Nome do indicado">
@@ -2777,7 +2910,7 @@
 <div class="overlay" id="qrModal" onclick="if(event.target===this)closeQr()">
   <div class="modal" style="position:relative;width:380px">
     <button class="modal-x" onclick="closeQr()">✕</button>
-    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span> COBRANÇA <span style="color:var(--pink)">QRCODE</span></div>
+    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span> COBRANÇA <span style="color:var(--pink)">QRCODE</span></div>
     <p class="s" style="margin:0 0 16px;padding-left:39px">Escaneie o QR Code para processar</p>
     <div style="border:2px solid var(--ink);border-radius:14px;padding:16px;margin-bottom:14px">
       <div style="font-weight:800;margin-bottom:12px" id="qrTxId">Transação #25-2585</div>
@@ -2816,7 +2949,22 @@
     <div style="font-weight:800;font-size:14px">Colunas</div>
     <div class="sec-sub" style="margin:2px 0 12px">Habilite/desabilite as colunas e altere seus nomes.</div>
     <div class="rep-grid" id="reportCols"></div>
-    <button class="btn btn-pink" style="float:right;margin-top:18px" onclick="closeReport();toast('Relatório gerado — download iniciado')">Confirmar</button><div style="clear:both"></div>
+    <button class="btn btn-pink" style="float:right;margin-top:18px" onclick="genReportCSV()">Confirmar</button><div style="clear:both"></div>
+  </div>
+</div>
+
+<!-- ADICIONAR RASTREIO EM MASSA (Pedidos) -->
+<div class="overlay" id="pedTrackModal" onclick="if(event.target===this)closeTrackModal()">
+  <div class="modal" style="position:relative">
+    <button class="modal-x" onclick="closeTrackModal()">✕</button>
+    <div class="modal-h">🚚 ADICIONAR <span style="color:var(--pink)">RASTREIO</span></div>
+    <p class="s" id="pedTrackNote" style="margin:2px 0 14px"></p>
+    <div class="nb-lab" style="margin-top:0">Transportadora</div>
+    <select class="ctrl-sel" id="pedTrackCarrier"><option>Correios</option><option>Jadlog</option><option>Loggi</option><option>Melhor Envio</option><option>Retirada/Entrega própria</option></select>
+    <div class="nb-lab" style="margin-top:12px">Código de rastreio</div>
+    <input class="saque-inp" id="pedTrackCode" placeholder="Ex.: BR123456789BR">
+    <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:13px;cursor:pointer"><input type="checkbox" id="pedTrackPending"> Apenas marcar como “aguardando rastreio”</label>
+    <button class="btn btn-pink" style="float:right;margin-top:16px" onclick="applyBulkTrack()">Aplicar</button><div style="clear:both"></div>
   </div>
 </div>
 
@@ -2897,7 +3045,7 @@
 <div class="overlay" id="antecipModal" onclick="if(event.target===this)closeAntecip()">
   <div class="modal" style="position:relative;width:440px">
     <button class="modal-x" onclick="closeAntecip()">✕</button>
-    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#ff1f8e"><path d="M13 2 3 14h8l-1 8 10-12h-8z"/></svg></span> SOLICITAR <span style="color:var(--pink)">ANTECIPAÇÃO</span></div>
+    <div class="modal-h" style="margin-bottom:2px"><span class="badge-ic" style="background:var(--grad-soft)"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)"><path d="M13 2 3 14h8l-1 8 10-12h-8z"/></svg></span> SOLICITAR <span style="color:var(--pink)">ANTECIPAÇÃO</span></div>
     <p class="s" style="margin:0 0 18px;padding-left:39px">Antecipe seus recebíveis futuros</p>
     <div style="display:flex;gap:12px;margin-bottom:16px">
       <div class="saldo-box"><span>Disponível para antecipar</span><b>R$ 14.250,30</b></div>
@@ -2972,14 +3120,13 @@ function qrSvg(seed){
   for(var y=0;y<N;y++)for(var x=0;x<N;x++){var f=inFinder(x,y),d;if(f!==null)d=f;else if(inArea(x,y))d=false;else{s=(s*1103515245+12345)>>>0;d=((s>>16)&1)===1;}if(d)rects+='<rect x="'+(x*10)+'" y="'+(y*10)+'" width="10" height="10"/>';}
   return '<svg viewBox="0 0 210 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><rect width="210" height="210" fill="#fff"/><g fill="#0a0a0b">'+rects+'</g></svg>';
 }
-var curPed=0;
 function openQr(){
-  var p=pedidos[curPed]||pedidos[0];
-  document.getElementById('qrTxId').textContent='Transação '+p[0];
-  document.getElementById('qrGer').textContent='📅 '+p[6].replace('Gerada: ','');
-  document.getElementById('qrVal').textContent='R$ '+p[5];
-  document.getElementById('qrCode').textContent='00020126820014br.gov.bcb.pix'+p[0].replace(/\D/g,'')+'5204000053039865802BR6304A1B2';
-  document.getElementById('qrImg').innerHTML=qrSvg(p[0]);
+  var o=(typeof pedById==='function'&&pedById(curPedId))||PEDIDOS[0];
+  document.getElementById('qrTxId').textContent='Transação '+o.id;
+  document.getElementById('qrGer').textContent='📅 '+pedFmtDateTime(o.createdAt);
+  document.getElementById('qrVal').textContent=pedBRL(o.amount.gross);
+  document.getElementById('qrCode').textContent='00020126820014br.gov.bcb.pix'+o.id.replace(/\D/g,'')+'5204000053039865802BR6304A1B2';
+  document.getElementById('qrImg').innerHTML=qrSvg(o.id);
   document.getElementById('qrModal').classList.add('show');
 }
 function closeQr(){document.getElementById('qrModal').classList.remove('show')}
@@ -3021,7 +3168,18 @@ function openCliente(i){
 }
 function indMail(v){document.getElementById('indMailTo').textContent=(v&&v.trim())||'email@email.com'}
 function indEnviar(){var e=(document.getElementById('indEmail').value||'').trim()||'o e-mail informado'; closeIndicar(); toast('Convite enviado para '+e)}
-function confirmRefund(){ if(confirm('Reembolsar este pedido? Esta ação não pode ser desfeita.')) toast('Reembolso solicitado'); }
+function resendPayloads(){ if(confirm('Reenviar os payloads/webhooks deste pedido?')) toast('Payloads reenviados'); }
+function confirmRefund(){
+  if(!PED_PERMS.refund){toast('Sem permissão para reembolsar');return;}
+  var o=pedById(curPedId); if(!o)return;
+  if(!pedCanRefund(o)){toast('Pedido não elegível para reembolso');return;}
+  if(confirm('Reembolsar este pedido? Esta ação não pode ser desfeita.')){
+    o.status='refund'; o.refundedAt=pedNowISO(); o.updatedAt=o.refundedAt;
+    toast('Reembolso solicitado');
+    if(typeof renderPedidos==='function') renderPedidos();
+    openPedido(o.id);
+  }
+}
 
 /* ---------- config tabs ---------- */
 document.querySelectorAll('#cfgTabs button').forEach(b=>b.addEventListener('click',()=>{
@@ -3061,115 +3219,390 @@ function buildChart(){
   requestAnimationFrame(setH); setTimeout(setH,60);
 }
 
-/* ---------- pedidos data ---------- */
-const statusMap={Pago:'t-green',Pendente:'t-amber',MED:'t-red',Disputa:'t-red',Chargeback:'t-red',Reembolso:'t-red',Recusado:'t-red',Processando:'t-orange'};
-const ORIGENS=['Checkout Marcha','Zedy','VIP Gram','API','Corvex','Luna Checkout','Shark Bot'];
-/* p[8]=parcelas (só Cartão) */
-const pedidos=[
- ['#25-2585','Fábio Hulk','Kit Suporte para Evento','Pago','PIX','147,90','Gerada: 24/05/25 12:30','Paga: 24/05/25 12:30',''],
- ['#25-2586','Banana voadora','Kit Suporte para Evento','Pendente','PIX','89,90','Gerada: 24/05/25 12:30','Paga: N/A',''],
- ['#25-2587','Luiza não','Kit Suporte para Evento','MED','PIX','219,00','Reembolsada','24/05/25 12:30',''],
- ['#25-2588','Alice Mendes Souza','Kit Suporte para Evento','Disputa','PIX','120,00','Contestada','24/05/25 12:30',''],
- ['#25-2589','Alice Mendes Souza','Kit Suporte para Evento','Disputa','CARTÃO','356,00','Contestada','24/05/25 12:30','3x'],
- ['#25-2590','Alice Mendes Souza','Kit Suporte para Evento','Chargeback','CARTÃO','240,00','Reembolsada','24/05/25 12:30','2x'],
- ['#25-2591','Alice Mendes Souza','Kit Suporte para Evento','Reembolso','PIX','97,00','Reembolsada','24/05/25 12:30',''],
- ['#25-2592','Alice Mendes Souza','Kit Suporte para Evento','Recusado','CARTÃO','540,00','Recusada','24/05/25 12:30','6x'],
- ['#25-2593','Fábio Hulk','Kit Suporte para Evento','Pendente','Boleto','129,00','Gerada: 24/05/25 12:30','Paga: N/A',''],
- ['#25-2594','Banana voadora','Kit Suporte para Evento','Processando','CARTÃO','412,00','Gerada: 24/05/25 12:30','Paga: N/A','4x'],
- ['#25-2595','Marina Costa','Masterclass de SEO','Pago','PIX','349,00','Gerada: 23/05/25 09:10','Paga: 23/05/25 09:11',''],
- ['#25-2596','João Silva','Curso de Vendas Online','Pago','CARTÃO','597,00','Gerada: 22/05/25 18:40','Paga: 22/05/25 18:41','12x'],
+/* ============================================================= */
+/* PEDIDOS — INÍCIO (dados mock com schema, status, helpers)      */
+/* Mock estruturado em OBJETOS (não array posicional). Backend deve */
+/* prover estes campos por loja (storeId) com checagem de dono.     */
+/* Contrato de dados documentado em PROTOTYPE-IMPLEMENTATION-SPEC.md.*/
+
+/* permissões do vendedor (mock — backend decide por membro/loja) */
+const PED_PERMS={ refund:true };
+
+/* status canônico -> rótulo PT + classe de tag */
+const PED_ST={
+  processing:{label:'Processando',cls:'t-orange'},
+  pending:{label:'Pendente',cls:'t-amber'},
+  paid:{label:'Pago',cls:'t-green'},
+  refused:{label:'Recusado',cls:'t-red'},
+  refund:{label:'Reembolso',cls:'t-red'},
+  cancelled:{label:'Cancelado',cls:'t-red'},
+  expired:{label:'Expirado',cls:'t-red'},
+  med:{label:'MED',cls:'t-red'},
+  dispute:{label:'Disputa',cls:'t-red'},
+  chargeback:{label:'Chargeback',cls:'t-red'}
+};
+const PED_METHOD={pix:'PIX',card:'Cartão',boleto:'Boleto'};
+
+/* âncora de período (mock determinístico p/ os filtros de data) */
+const PED_NOW=new Date(2026,5,21,23,59,59);
+function pedNowISO(){return '2026-06-21T18:00:00';}
+
+/* ---- dados mock (loja ativa) ---- */
+const PEDIDOS=[
+ {id:'#25-2585',uuid:'b1a2c3d4-1111-4aaa-9001-aaaa00002585',e2e:'E31872495202606210726HAlx6ABHcSL',customer:{name:'Fábio Hulk',cpf:'460.737.208-07',phone:'(11) 98663-8528',email:'fabio.hulk@email.com'},product:{id:'PRD012',name:'Kit Suporte para Evento',type:'physical'},status:'paid',payment:{method:'pix',installments:null,brand:null,acquirer:'MarchaPay'},amount:{gross:147.90,currency:'BRL'},origin:'Checkout Marcha',tracking:{code:'BR252585BR',url:'https://rastreio.somosmarcha.com/BR252585BR'},createdAt:'2026-06-21T12:30:00',paidAt:'2026-06-21T12:30:40',refundedAt:null,updatedAt:'2026-06-21T12:30:40',ip:'133.0.176.19',metaProvider:'Depósito',shipped:true},
+ {id:'#25-2586',uuid:'b1a2c3d4-1111-4aaa-9002-aaaa00002586',e2e:'E31872495202606210731Kb2x9Q2HcSL',customer:{name:'Banana Voadora',cpf:'333.444.555-22',phone:'(21) 99812-3344',email:'banana.voadora@email.com'},product:{id:'PRD012',name:'Kit Suporte para Evento',type:'physical'},status:'pending',payment:{method:'pix',installments:null,brand:null,acquirer:'MarchaPay'},amount:{gross:89.90,currency:'BRL'},origin:'Zedy',tracking:null,createdAt:'2026-06-21T09:05:00',paidAt:null,refundedAt:null,updatedAt:'2026-06-21T09:05:00',ip:'201.55.10.4',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2587',uuid:'b1a2c3d4-1111-4aaa-9003-aaaa00002587',e2e:'E31872495202606200512Lz0p3RxHcSL',customer:{name:'Luiza Nunes',cpf:'712.908.114-50',phone:'(31) 98123-7788',email:'luiza.nunes@email.com'},product:{id:'PRD021',name:'Masterclass de SEO',type:'digital'},status:'med',payment:{method:'pix',installments:null,brand:null,acquirer:'MarchaPay'},amount:{gross:219.00,currency:'BRL'},origin:'VIP Gram',tracking:null,createdAt:'2026-06-20T15:40:00',paidAt:'2026-06-20T15:41:00',refundedAt:null,updatedAt:'2026-06-20T16:10:00',ip:'177.12.88.9',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2588',uuid:'b1a2c3d4-1111-4aaa-9004-aaaa00002588',e2e:'E31872495202606200620Mw1q4SxHcSL',customer:{name:'Alice Mendes Souza',cpf:'089.221.770-31',phone:'(11) 99777-1122',email:'alice.mendes@email.com'},product:{id:'PRD012',name:'Kit Suporte para Evento',type:'physical'},status:'dispute',payment:{method:'pix',installments:null,brand:null,acquirer:'MarchaPay'},amount:{gross:120.00,currency:'BRL'},origin:'Checkout Marcha',tracking:null,createdAt:'2026-06-20T11:15:00',paidAt:'2026-06-20T11:16:00',refundedAt:null,updatedAt:'2026-06-20T12:00:00',ip:'186.220.7.31',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2589',uuid:'b1a2c3d4-1111-4aaa-9005-aaaa00002589',e2e:null,customer:{name:'Alice Mendes Souza',cpf:'089.221.770-31',phone:'(11) 99777-1122',email:'alice.mendes@email.com'},product:{id:'PRD033',name:'Curso de Vendas Online',type:'digital'},status:'dispute',payment:{method:'card',installments:'3x',brand:'Mastercard',acquirer:'Pluggou_V2'},amount:{gross:356.00,currency:'BRL'},origin:'API',tracking:null,createdAt:'2026-06-18T18:22:00',paidAt:'2026-06-18T18:23:00',refundedAt:null,updatedAt:'2026-06-18T19:00:00',ip:'191.5.44.120',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2590',uuid:'b1a2c3d4-1111-4aaa-9006-aaaa00002590',e2e:null,customer:{name:'Alice Mendes Souza',cpf:'089.221.770-31',phone:'(11) 99777-1122',email:'alice.mendes@email.com'},product:{id:'PRD033',name:'Curso de Vendas Online',type:'digital'},status:'chargeback',payment:{method:'card',installments:'2x',brand:'Visa',acquirer:'Pluggou_V2'},amount:{gross:240.00,currency:'BRL'},origin:'Corvex',tracking:null,createdAt:'2026-06-16T10:05:00',paidAt:'2026-06-16T10:06:00',refundedAt:'2026-06-17T09:00:00',updatedAt:'2026-06-17T09:00:00',ip:'138.99.2.7',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2591',uuid:'b1a2c3d4-1111-4aaa-9007-aaaa00002591',e2e:'E31872495202606150410Np2r5TxHcSL',customer:{name:'Alice Mendes Souza',cpf:'089.221.770-31',phone:'(11) 99777-1122',email:'alice.mendes@email.com'},product:{id:'PRD044',name:'Acesso Grupo VIP',type:'digital'},status:'refund',payment:{method:'pix',installments:null,brand:null,acquirer:'MarchaPay'},amount:{gross:97.00,currency:'BRL'},origin:'Luna Checkout',tracking:null,createdAt:'2026-06-15T14:30:00',paidAt:'2026-06-15T14:31:00',refundedAt:'2026-06-15T16:00:00',updatedAt:'2026-06-15T16:00:00',ip:'170.80.33.18',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2592',uuid:'b1a2c3d4-1111-4aaa-9008-aaaa00002592',e2e:null,customer:{name:'Alice Mendes Souza',cpf:'089.221.770-31',phone:'(11) 99777-1122',email:'alice.mendes@email.com'},product:{id:'PRD033',name:'Curso de Vendas Online',type:'digital'},status:'refused',payment:{method:'card',installments:'6x',brand:'Elo',acquirer:'Pluggou_V2'},amount:{gross:540.00,currency:'BRL'},origin:'Shark Bot',tracking:null,createdAt:'2026-06-14T20:12:00',paidAt:null,refundedAt:null,updatedAt:'2026-06-14T20:12:00',ip:'45.231.9.200',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2593',uuid:'b1a2c3d4-1111-4aaa-9009-aaaa00002593',e2e:null,customer:{name:'Fábio Hulk',cpf:'460.737.208-07',phone:'(11) 98663-8528',email:'fabio.hulk@email.com'},product:{id:'PRD012',name:'Kit Suporte para Evento',type:'physical'},status:'pending',payment:{method:'boleto',installments:null,brand:null,acquirer:'MarchaPay'},amount:{gross:129.00,currency:'BRL'},origin:'Checkout Marcha',tracking:null,createdAt:'2026-06-12T08:40:00',paidAt:null,refundedAt:null,updatedAt:'2026-06-12T08:40:00',ip:'133.0.176.19',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2594',uuid:'b1a2c3d4-1111-4aaa-9010-aaaa00002594',e2e:null,customer:{name:'Banana Voadora',cpf:'333.444.555-22',phone:'(21) 99812-3344',email:'banana.voadora@email.com'},product:{id:'PRD033',name:'Curso de Vendas Online',type:'digital'},status:'processing',payment:{method:'card',installments:'4x',brand:'Visa',acquirer:'Pluggou_V2'},amount:{gross:412.00,currency:'BRL'},origin:'Zedy',tracking:null,createdAt:'2026-06-10T16:00:00',paidAt:null,refundedAt:null,updatedAt:'2026-06-10T16:00:00',ip:'201.55.10.4',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2595',uuid:'b1a2c3d4-1111-4aaa-9011-aaaa00002595',e2e:'E31872495202606050911Qr3s6UxHcSL',customer:{name:'Marina Costa',cpf:'556.012.349-88',phone:'(41) 98555-9090',email:'marina.costa@email.com'},product:{id:'PRD021',name:'Masterclass de SEO',type:'digital'},status:'paid',payment:{method:'pix',installments:null,brand:null,acquirer:'MarchaPay'},amount:{gross:349.00,currency:'BRL'},origin:'Checkout Marcha',tracking:null,createdAt:'2026-06-05T09:10:00',paidAt:'2026-06-05T09:11:00',refundedAt:null,updatedAt:'2026-06-05T09:11:00',ip:'200.130.44.2',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2596',uuid:'b1a2c3d4-1111-4aaa-9012-aaaa00002596',e2e:null,customer:{name:'João Silva',cpf:'201.778.640-19',phone:'(51) 99654-2210',email:'joao.silva@email.com'},product:{id:'PRD033',name:'Curso de Vendas Online',type:'digital'},status:'paid',payment:{method:'card',installments:'12x',brand:'Mastercard',acquirer:'Pluggou_V2'},amount:{gross:597.00,currency:'BRL'},origin:'API',tracking:null,createdAt:'2026-05-28T18:40:00',paidAt:'2026-05-28T18:41:00',refundedAt:null,updatedAt:'2026-05-28T18:41:00',ip:'179.108.5.66',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2597',uuid:'b1a2c3d4-1111-4aaa-9013-aaaa00002597',e2e:null,customer:{name:'Pedro Alves',cpf:'914.330.502-66',phone:'(61) 98330-7766',email:'pedro.alves@email.com'},product:{id:'PRD012',name:'Kit Suporte para Evento',type:'physical'},status:'paid',payment:{method:'boleto',installments:null,brand:null,acquirer:'MarchaPay'},amount:{gross:210.00,currency:'BRL'},origin:'Checkout Marcha',tracking:null,createdAt:'2026-05-22T11:00:00',paidAt:'2026-05-23T10:15:00',refundedAt:null,updatedAt:'2026-05-23T10:15:00',ip:'187.45.9.30',metaProvider:'Depósito',shipped:false},
+ {id:'#25-2598',uuid:'b1a2c3d4-1111-4aaa-9014-aaaa00002598',e2e:'E31872495202605150455Vt4u7WxHcSL',customer:{name:'Carla Dias',cpf:'145.220.913-04',phone:'(71) 99120-5533',email:'carla.dias@email.com'},product:{id:'PRD055',name:'E-book Tráfego Pago',type:'digital'},status:'expired',payment:{method:'pix',installments:null,brand:null,acquirer:'MarchaPay'},amount:{gross:47.00,currency:'BRL'},origin:'VIP Gram',tracking:null,createdAt:'2026-05-15T22:00:00',paidAt:null,refundedAt:null,updatedAt:'2026-05-15T23:45:00',ip:'191.32.8.14',metaProvider:'Depósito',shipped:false}
 ];
-function openPedido(i){
-  curPed=i;
-  const p=pedidos[i], cls=statusMap[p[3]];
-  document.getElementById('detUuid').textContent='Pedido ID '+p[0];
-  document.getElementById('detCliente').textContent=p[1];
-  document.getElementById('detProduto').textContent=p[2];
-  var metodo=p[4]==='CARTÃO'?'Cartão':p[4]==='PIX'?'Pix':'Boleto';
-  document.getElementById('detPagTag').textContent=metodo;
-  document.getElementById('detPagDesc').textContent=p[4]==='CARTÃO'?'Mastercard terminando em 3876':'';
-  var pago=p[3]==='Pago';
-  var pagoH=pago?'24/05/25 12:30':'—';
-  var estorno=(p[3]==='Reembolso'||p[3]==='Chargeback')?'24/05/25 13:10':'—';
-  var stTag='<span class="tag '+cls+'" style="margin-top:6px;display:inline-flex">'+p[3]+'</span>';
+
+/* ---- helpers de formatação/derivação (mock; net deve vir do backend) ---- */
+function pedPad(n){return String(n).padStart(2,'0');}
+function pedFmtDate(iso){if(!iso)return '—';var d=new Date(iso);return pedPad(d.getDate())+'/'+pedPad(d.getMonth()+1)+'/'+d.getFullYear();}
+function pedFmtDateTime(iso){if(!iso)return '—';var d=new Date(iso);return pedPad(d.getDate())+'/'+pedPad(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(2)+' '+pedPad(d.getHours())+':'+pedPad(d.getMinutes());}
+function pedBRL(n){return 'R$ '+(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function pedNet(o){return o.amount.gross*0.955;} /* mock: backend deve enviar amount.net */
+function pedMethodLabel(o){return PED_METHOD[o.payment.method]||o.payment.method;}
+function pedFisico(o){return o.product.type==='physical';}
+function pedCanRefund(o){return o.status==='paid';}
+function pedCanShip(o){return pedFisico(o)&&o.status==='paid'&&!o.shipped;}
+function maskCPF(cpf){var p=String(cpf||'').replace(/\D/g,'');return p.length>=11?p.slice(0,3)+'.***.***-'+p.slice(9):(cpf||'');}
+function pedById(id){for(var i=0;i<PEDIDOS.length;i++){if(PEDIDOS[i].id===id)return PEDIDOS[i];}return null;}
+var curPedId=null;
+function openPedido(id){
+  var o=pedById(id); if(!o) return;
+  curPedId=id;
+  var st=PED_ST[o.status]||{label:o.status,cls:''};
+  document.getElementById('detUuid').textContent='Pedido ID '+o.id;
+  document.getElementById('detCliente').textContent=o.customer.name;
+  document.getElementById('detProduto').textContent=o.product.name;
+  document.getElementById('detPagTag').textContent=pedMethodLabel(o);
+  document.getElementById('detPagDesc').textContent=o.payment.brand?(o.payment.brand+(o.payment.installments?' · '+o.payment.installments:'')):'';
+  var pago=(o.status==='paid'), pagoH=o.paidAt?pedFmtDateTime(o.paidAt):'—', estorno=o.refundedAt?pedFmtDateTime(o.refundedAt):'—';
+  var stTag='<span class="tag '+st.cls+'" style="margin-top:6px;display:inline-flex">'+st.label+'</span>';
   var info;
-  if(p[4]==='CARTÃO'){
-    info='Titular: <b>Fabiano que voa no céu</b><br>Expiração: <b>05/2026</b><br>Autenticação: <b>3DS</b><br>Parcelamento: <b>'+(p[8]||'1x')+'</b><br>Horário pago: <b>'+pagoH+'</b><br><span style="color:var(--soft)">Horário estornado: '+estorno+'</span><br>Status do Pagamento: '+stTag;
-  } else if(p[4]==='PIX'){
-    info='Horário pago: <b>'+pagoH+'</b><br><span style="color:var(--soft)">Vencimento: </span><b>04/06/25 23:45</b><br><span style="color:var(--soft)">Horário estornado: '+estorno+'</span><br><span style="color:var(--soft)">E2E:</span> <b style="word-break:break-all;font-size:11.5px">E31872495202605300726HAlx6ABHcSL</b><br>Status do Pagamento: '+stTag
-      +'<div style="margin-top:10px"><div style="color:var(--soft);font-size:11px">Copia e Cola:</div><div style="display:flex;gap:6px;align-items:center;margin-top:4px"><code style="flex:1;background:#fff0f6;border:1px solid #f4b6cb;border-radius:7px;padding:6px 8px;font-size:10.5px;word-break:break-all;color:#b51e52">00020101021126750014br.gov.bcb.pix0136e6c9…5204000053039865802BR</code><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toast(\'Pix copiado!\')" title="Copiar">⧉</button></div></div>';
+  if(o.payment.method==='card'){
+    info='Titular: <b>'+o.customer.name+'</b><br>Bandeira: <b>'+(o.payment.brand||'—')+'</b><br>Autenticação: <b>3DS</b><br>Parcelamento: <b>'+(o.payment.installments||'1x')+'</b><br>Horário pago: <b>'+pagoH+'</b><br><span style="color:var(--soft)">Horário estornado: '+estorno+'</span><br>Status do Pagamento: '+stTag;
+  } else if(o.payment.method==='pix'){
+    info='Horário pago: <b>'+pagoH+'</b><br><span style="color:var(--soft)">Horário estornado: '+estorno+'</span><br><span style="color:var(--soft)">E2E:</span> <b style="word-break:break-all;font-size:11.5px">'+(o.e2e||'—')+'</b><br>Status do Pagamento: '+stTag
+      +'<div style="margin-top:10px"><div style="color:var(--soft);font-size:11px">Copia e Cola:</div><div style="display:flex;gap:6px;align-items:center;margin-top:4px"><code style="flex:1;background:var(--accent-soft);border:1px solid #f4b6cb;border-radius:7px;padding:6px 8px;font-size:10.5px;word-break:break-all;color:#b51e52">00020101021126750014br.gov.bcb.pix0136e6c9…5204000053039865802BR</code><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toast(\'Pix copiado!\')" title="Copiar">⧉</button></div></div>';
   } else {
     info='Horário pago: <b>'+pagoH+'</b><br><span style="color:var(--soft)">Código de Barra:</span><br><b style="word-break:break-all;font-size:11.5px">36490.00019 00065.265506 00000.009241 8 00000000009000</b><br>Status do Pagamento: '+stTag;
   }
   document.getElementById('detPagInfo').innerHTML=info;
   var acts='';
-  if(p[4]!=='Boleto') acts+='<button class="btn btn-ghost btn-sm" onclick="confirmRefund()">Reembolsar</button>';
-  acts+='<button class="btn btn-ghost btn-sm" onclick="toast(\'Payloads reenviados\')">Reenviar Payloads</button>';
+  if(pedCanRefund(o)&&PED_PERMS.refund) acts+='<button class="btn btn-ghost btn-sm" onclick="confirmRefund()">Reembolsar</button>';
+  acts+='<button class="btn btn-ghost btn-sm" onclick="resendPayloads()">Reenviar Payloads</button>';
   acts+='<button class="btn btn-pink btn-sm" onclick="toast(\'Abrindo comprovante…\')">Comprovante</button>';
-  if(p[4]==='PIX') acts+='<button class="btn btn-pink btn-sm" onclick="openQr()">Ver QRCODE</button>';
-  if(p[4]==='Boleto') acts+='<button class="btn btn-pink btn-sm" onclick="toast(\'Abrindo boleto…\')">Ver Boleto</button>';
+  if(o.payment.method==='pix') acts+='<button class="btn btn-pink btn-sm" onclick="openQr()">Ver QRCODE</button>';
+  if(o.payment.method==='boleto') acts+='<button class="btn btn-pink btn-sm" onclick="toast(\'Abrindo boleto…\')">Ver Boleto</button>';
   document.getElementById('detActions').innerHTML=acts;
-  document.getElementById('detVBruto').textContent='R$ '+p[5];
-  document.getElementById('detTxId').textContent=p[0].replace(/\D/g,'');
-  document.getElementById('detCriada').textContent=p[6].replace('Gerada: ','');
-  document.getElementById('detAtualiza').textContent=(p[7]&&p[7].indexOf('N/A')<0)?p[7].replace('Paga: ',''):p[6].replace('Gerada: ','');
+  document.getElementById('detVBruto').textContent=pedBRL(o.amount.gross);
+  document.getElementById('detTxId').textContent=o.id.replace(/\D/g,'');
+  document.getElementById('detCriada').textContent=pedFmtDateTime(o.createdAt);
+  document.getElementById('detAtualiza').textContent=pedFmtDateTime(o.updatedAt||o.paidAt||o.createdAt);
   document.getElementById('detPagoEm').textContent=pago?pagoH:'Não informado';
-  document.getElementById('detEstornoEm').textContent=estorno;
-  document.getElementById('detMeta').textContent=p[2];
-  const sit=document.getElementById('detSit');
-  const M={Pago:['✓ Pagamento confirmado.','#e7f7ee','#0f7a3d'],Pendente:['⏱ Aguardando pagamento do cliente.','#fff5dc','#9a6a00'],MED:['⚠ MED aberto — em análise pela instituição.','#ffe3ec','#b51e52'],Disputa:['⚠ Pedido contestado pelo cliente. Responda na aba Disputas.','#ffe3ec','#b51e52'],Chargeback:['⚠ Chargeback recebido — valor estornado.','#ffe3ec','#b51e52'],Reembolso:['↩ Pedido reembolsado ao cliente.','#ffe3ec','#b51e52'],Recusado:['✕ Pagamento recusado pela operadora.','#ffe3ec','#b51e52'],Processando:['⏳ Pagamento em processamento.','#ffe9d6','#b35a12']};
-  const m=M[p[3]]||['','#f4f5f8','#3a3e46']; sit.textContent=m[0]; sit.style.background=m[1]; sit.style.color=m[2];
+  document.getElementById('detEstornoEm').textContent=o.refundedAt?estorno:'Não informado';
+  document.getElementById('detMeta').textContent=o.product.name;
+  /* rastreio (persistível) */
+  if(o.tracking){
+    document.getElementById('rastCode').textContent=o.tracking.code;
+    document.getElementById('rastLink').textContent=o.tracking.url;
+    document.getElementById('rastCodeInp').value=o.tracking.code;
+    document.getElementById('rastLinkInp').value=o.tracking.url;
+  } else {
+    document.getElementById('rastCode').textContent='—';
+    document.getElementById('rastLink').textContent='—';
+    document.getElementById('rastCodeInp').value='';
+    document.getElementById('rastLinkInp').value='';
+  }
+  if(typeof rastEdit==='function') rastEdit(false);
+  var sit=document.getElementById('detSit');
+  var M={paid:['✓ Pagamento confirmado.','#e7f7ee','#0f7a3d'],pending:['⏱ Aguardando pagamento do cliente.','#fff5dc','#9a6a00'],processing:['⏳ Pagamento em processamento.','#ffe9d6','#b35a12'],med:['⚠ MED aberto — em análise pela instituição.','#ffe3ec','#b51e52'],dispute:['⚠ Pedido contestado pelo cliente. Responda na aba Disputas.','#ffe3ec','#b51e52'],chargeback:['⚠ Chargeback recebido — valor estornado.','#ffe3ec','#b51e52'],refund:['↩ Pedido reembolsado ao cliente.','#ffe3ec','#b51e52'],refused:['✕ Pagamento recusado pela operadora.','#ffe3ec','#b51e52'],cancelled:['✕ Pedido cancelado.','#ffe3ec','#b51e52'],expired:['⌛ Pedido expirou sem pagamento.','#f4f5f8','#5a5f68']};
+  var m=M[o.status]||['','#f4f5f8','#3a3e46']; sit.textContent=m[0]; sit.style.background=m[1]; sit.style.color=m[2];
   go('detalhe');
 }
-function pedFisico(p){return p[2].includes('Kit');}
-function pedTrack(p){return pedFisico(p)?'BR'+p[0].replace(/\D/g,'')+'BR':'—';}
-function pedOrigem(i){return ORIGENS[i%ORIGENS.length];}
-const CPFS=['460.737.208-07','333.444.555-22','712.908.114-50','089.221.770-31','556.012.349-88','201.778.640-19','914.330.502-66'];
-function pedCpf(i){return CPFS[i%CPFS.length];}
-function pedLiquido(p){var v=parseFloat(p[5].replace(/\./g,'').replace(',','.'))*0.955;return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
-
-/* ---- colunas da tabela ---- */
-const COLS=[
- {k:'uuid',label:'UUID',def:true,cell:(p,i)=>`<td class="uuid"><span>${p[0]}</span><button class="cpbtn" onclick="event.stopPropagation();toast('ID copiado!')" title="Copiar">⧉</button></td>`},
- {k:'cliente',label:'Cliente',def:true,cell:(p,i)=>`<td>${p[1]}<span class="sub">${pedCpf(i)}</span></td>`},
- {k:'produto',label:'Nome do produto',def:true,cell:(p)=>`<td>${p[2]}</td>`},
- {k:'tipo',label:'Tipo',def:true,cell:(p)=>`<td>${pedFisico(p)?'<span class="tag" style="background:#e7f0ff;color:#2f7bff;border-color:#c7ddff">Físico</span>':'<span class="tag" style="background:#efe7ff;color:#7c3aed;border-color:#dcccff">Digital</span>'}</td>`},
- {k:'status',label:'Status',def:true,cell:(p)=>`<td><span class="tag ${statusMap[p[3]]}">${p[3]}</span></td>`},
- {k:'pag',label:'Tipo de Pagamento',def:true,cell:(p)=>`<td>${p[4]}${p[8]?' <span style="color:var(--soft)">· '+p[8]+'</span>':''}</td>`},
- {k:'origem',label:'Origem',def:true,cell:(p,i)=>`<td>${pedOrigem(i)}</td>`},
- {k:'valor',label:'Valor R$',def:true,cell:(p)=>`<td>R$ ${p[5]}</td>`},
- {k:'liquido',label:'Valor líquido',def:true,cell:(p)=>`<td style="color:var(--green)">${pedLiquido(p)}</td>`},
- {k:'horarios',label:'Horários de pagamento',def:true,cell:(p)=>`<td style="font-size:11.5px">${p[6]}<span class="sub">${p[7]}</span></td>`},
- {k:'rastreio',label:'Rastreio',def:true,cell:(p)=>pedFisico(p)?`<td class="track">${pedTrack(p)}</td>`:'<td style="color:var(--soft)">—</td>'},
- {k:'acoes',label:'Ações',def:true,cell:(p,i)=>`<td><button class="btn btn-ghost btn-sm" onclick="openPedido(${i})" title="Editar pedido"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:14px;height:14px"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Editar</button></td>`},
+/* ---- colunas da tabela (8 essenciais + opcionais ocultas) ---- */
+const PED_COLS=[
+ {k:'sel'},
+ {k:'uuid',label:'Pedido',ess:true,cell:o=>`<td class="uuid"><span>${o.id}</span><button class="cpbtn" onclick="event.stopPropagation();toast('ID copiado!')" title="Copiar">⧉</button></td>`,val:o=>o.id},
+ {k:'cliente',label:'Cliente',ess:true,cell:o=>`<td>${o.customer.name}<span class="sub">${o.customer.cpf}</span></td>`,val:o=>o.customer.name},
+ {k:'produto',label:'Produto',ess:true,cell:o=>`<td>${o.product.name}</td>`,val:o=>o.product.name},
+ {k:'tipo',label:'Tipo',opt:true,vis:false,cell:o=>`<td>${pedFisico(o)?'<span class="tag" style="background:#e7f0ff;color:#2f7bff;border-color:#c7ddff">Físico</span>':'<span class="tag" style="background:#efe7ff;color:#7c3aed;border-color:#dcccff">Digital</span>'}</td>`,val:o=>pedFisico(o)?'Físico':'Digital'},
+ {k:'status',label:'Status',ess:true,cell:o=>`<td><span class="tag ${PED_ST[o.status].cls}">${PED_ST[o.status].label}</span></td>`,val:o=>PED_ST[o.status].label},
+ {k:'pag',label:'Pagamento',ess:true,cell:o=>`<td>${pedMethodLabel(o)}${o.payment.installments?' <span style="color:var(--soft)">· '+o.payment.installments+'</span>':''}</td>`,val:o=>pedMethodLabel(o)},
+ {k:'valor',label:'Valor',ess:true,cell:o=>`<td>${pedBRL(o.amount.gross)}</td>`,val:o=>pedBRL(o.amount.gross)},
+ {k:'liquido',label:'Valor líquido',opt:true,vis:false,cell:o=>`<td style="color:var(--green)">${pedBRL(pedNet(o))}</td>`,val:o=>pedBRL(pedNet(o))},
+ {k:'origem',label:'Origem',opt:true,vis:false,cell:o=>`<td>${o.origin}</td>`,val:o=>o.origin},
+ {k:'data',label:'Data / Horário',ess:true,cell:o=>`<td style="font-size:11.5px">Gerada: ${pedFmtDateTime(o.createdAt)}<span class="sub">${o.paidAt?'Paga: '+pedFmtDateTime(o.paidAt):'Paga: N/A'}</span></td>`,val:o=>pedFmtDateTime(o.createdAt)},
+ {k:'rastreio',label:'Rastreio',opt:true,vis:false,cell:o=>o.tracking?`<td class="track">${o.tracking.code}</td>`:(o.trackingPending?'<td style="color:#9a6a00">Aguardando</td>':'<td style="color:var(--soft)">—</td>'),val:o=>o.tracking?o.tracking.code:(o.trackingPending?'Aguardando':'—')},
+ {k:'acoes',label:'Ações',ess:true,cell:o=>`<td><button class="btn btn-ghost btn-sm" style="padding:4px 10px" onclick="openPedido('${o.id}')" title="Ver pedido"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:14px;height:14px"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>Ver</button></td>`}
 ];
-function renderThead(){document.getElementById('pedThead').innerHTML='<tr>'+COLS.map(function(c){return '<th>'+c.label+'</th>';}).join('')+'</tr>';}
-function pedRow(p,i){return '<tr>'+COLS.map(function(c){return c.cell(p,i);}).join('')+'</tr>';}
+function pedVisibleCols(){return PED_COLS.filter(function(c){return c.k==='sel'||c.ess||c.vis;});}
+function renderThead(){
+  document.getElementById('pedThead').innerHTML='<tr>'+pedVisibleCols().map(function(c){
+    if(c.k==='sel') return '<th class="ped-ck"><input type="checkbox" id="pedCkAll" onclick="pedToggleAll(this)"></th>';
+    return '<th>'+c.label+'</th>';
+  }).join('')+'</tr>';
+}
+function pedRow(o){
+  return '<tr class="'+(pedSel.has(o.id)?'sel':'')+'">'+pedVisibleCols().map(function(c){
+    if(c.k==='sel') return '<td class="ped-ck"><input type="checkbox" class="ped-rowck" '+(pedSel.has(o.id)?'checked':'')+' onclick="pedToggleRow(\''+o.id+'\',this)"></td>';
+    return c.cell(o);
+  }).join('')+'</tr>';
+}
 
-/* ---- filtros ---- */
+/* ---- menu de colunas ---- */
+function buildColMenu(){
+  var pop=document.getElementById('pedColPop'); if(!pop)return;
+  pop.innerHTML=PED_COLS.filter(function(c){return c.opt;}).map(function(c){
+    return '<label><input type="checkbox" '+(c.vis?'checked':'')+' onclick="pedToggleCol(\''+c.k+'\',this)"> '+c.label+'</label>';
+  }).join('');
+}
+function pedToggleCol(k,el){var c=PED_COLS.filter(function(x){return x.k===k;})[0]; if(c){c.vis=el.checked; renderPedidos();}}
+function pedToggleColMenu(e){e.stopPropagation(); document.getElementById('pedColPop').classList.toggle('show');}
+
+/* ---- seleção em massa ---- */
+var pedSel=new Set();
+function pedToggleRow(id,el){ if(el.checked)pedSel.add(id); else pedSel.delete(id); var tr=el.closest('tr'); if(tr)tr.classList.toggle('sel',el.checked); updateBulkBar(); }
+function pedToggleAll(el){ (pedPageItems||[]).forEach(function(o){ if(el.checked)pedSel.add(o.id); else pedSel.delete(o.id); }); renderPedidos(); }
+function pedClearSel(){ pedSel.clear(); renderPedidos(); }
+function updateBulkBar(){
+  var bar=document.getElementById('pedBulkBar'); if(!bar)return;
+  var n=pedSel.size;
+  document.getElementById('pedBulkCount').textContent=n+' pedido'+(n===1?'':'s')+' selecionado'+(n===1?'':'s');
+  bar.classList.toggle('show', n>0);
+  var elig=0; pedSel.forEach(function(id){var o=pedById(id); if(o&&pedCanRefund(o))elig++;});
+  var rb=document.getElementById('pedBulkRefund');
+  if(rb){ rb.style.display=PED_PERMS.refund?'':'none'; rb.disabled=(elig===0); rb.style.opacity=elig===0?'.5':''; rb.title=elig===0?'Nenhum selecionado elegível para reembolso':('Reembolsar '+elig+' elegível(is)'); }
+  var all=document.getElementById('pedCkAll');
+  if(all){ var ids=(pedPageItems||[]).map(function(o){return o.id;}); all.checked=ids.length>0&&ids.every(function(id){return pedSel.has(id);}); }
+}
+function pedSelected(){ return PEDIDOS.filter(function(o){return pedSel.has(o.id);}); }
+
+/* Marcar como enviado: físico+pago; sem rastreio -> aguardando rastreio */
+function bulkMarkShipped(){
+  var sel=pedSelected(); if(!sel.length){toast('Selecione ao menos um pedido');return;}
+  var done=0, pend=0;
+  sel.forEach(function(o){ if(pedCanShip(o)){ o.shipped=true; if(!o.tracking){o.trackingPending=true; pend++;} o.updatedAt=pedNowISO(); done++; } });
+  if(!done){toast('Nenhum selecionado elegível (físico e pago)');return;}
+  toast(done+' pedido'+(done===1?'':'s')+' marcado'+(done===1?'':'s')+' como enviado'+(pend?(' ('+pend+' aguardando rastreio)'):''));
+  renderPedidos();
+}
+
+/* Alterar status em massa (sensíveis pedem confirmação) */
+const PED_STATUS_ORDER=[['paid','Pago'],['pending','Pendente'],['processing','Processando'],['refused','Recusado'],['expired','Expirado'],['refund','Reembolso'],['dispute','Disputa'],['chargeback','Chargeback'],['med','MED']];
+const PED_SENSITIVE=['refund','dispute','chargeback','med'];
+function pedBuildStatusMenu(){
+  var pop=document.getElementById('pedStatusPop'); if(!pop)return;
+  pop.innerHTML=PED_STATUS_ORDER.map(function(s){return '<button type="button" onclick="bulkSetStatus(\''+s[0]+'\')">'+s[1]+(PED_SENSITIVE.indexOf(s[0])>=0?' <span class="ped-sens">!</span>':'')+'</button>';}).join('');
+}
+function pedToggleStatusMenu(e){ e.stopPropagation(); if(!pedSel.size){toast('Selecione ao menos um pedido');return;} document.getElementById('pedStatusPop').classList.toggle('show'); }
+function bulkSetStatus(key){
+  var sel=pedSelected(); if(!sel.length){toast('Selecione ao menos um pedido');return;}
+  var label=PED_ST[key]?PED_ST[key].label:key;
+  if(PED_SENSITIVE.indexOf(key)>=0){ if(!confirm('Alterar status de '+sel.length+' pedido'+(sel.length===1?'':'s')+' para “'+label+'”?\n\nStatus sensível — pode afetar conciliação e saldo. Deseja continuar?')) return; }
+  sel.forEach(function(o){ o.status=key; if((key==='refund'||key==='chargeback')&&!o.refundedAt) o.refundedAt=pedNowISO(); o.updatedAt=pedNowISO(); });
+  var pop=document.getElementById('pedStatusPop'); if(pop)pop.classList.remove('show');
+  toast('Status atualizado em '+sel.length+' pedido'+(sel.length===1?'':'s'));
+  renderPedidos();
+}
+
+/* Adicionar rastreio em massa (modal) */
+function openTrackModal(){
+  var sel=pedSelected(); if(!sel.length){toast('Selecione ao menos um pedido');return;}
+  var phys=sel.filter(pedFisico).length;
+  document.getElementById('pedTrackNote').textContent = sel.length>1
+    ? ('O mesmo rastreio será aplicado aos '+sel.length+' pedidos selecionados'+(phys<sel.length?' (itens digitais serão ignorados)':'')+'.')
+    : 'Rastreio aplicado ao pedido selecionado.';
+  document.getElementById('pedTrackCode').value='';
+  document.getElementById('pedTrackPending').checked=false;
+  document.getElementById('pedTrackModal').classList.add('show');
+}
+function closeTrackModal(){ document.getElementById('pedTrackModal').classList.remove('show'); }
+function applyBulkTrack(){
+  var pending=document.getElementById('pedTrackPending').checked;
+  var carrier=document.getElementById('pedTrackCarrier').value;
+  var code=(document.getElementById('pedTrackCode').value||'').trim();
+  if(!pending && !code){ toast('Informe o código de rastreio ou marque “aguardando rastreio”'); return; }
+  var done=0;
+  pedSelected().forEach(function(o){ if(!pedFisico(o))return; if(pending){ o.trackingPending=true; } else { o.tracking={code:code,url:'https://rastreio.somosmarcha.com/'+encodeURIComponent(code),carrier:carrier}; o.trackingPending=false; } o.updatedAt=pedNowISO(); done++; });
+  closeTrackModal();
+  toast(pending?(done+' pedido'+(done===1?'':'s')+' marcado'+(done===1?'':'s')+' como aguardando rastreio'):('Rastreio adicionado em '+done+' pedido'+(done===1?'':'s')));
+  renderPedidos();
+}
+
+/* Reembolsar selecionados — AÇÃO SENSÍVEL */
+function bulkRefund(){
+  if(!PED_PERMS.refund){toast('Sem permissão para reembolsar');return;}
+  var sel=pedSelected(); if(!sel.length){toast('Selecione ao menos um pedido');return;}
+  var elig=sel.filter(pedCanRefund);
+  var sensitive=sel.filter(function(o){return ['dispute','chargeback','med'].indexOf(o.status)>=0;});
+  var nonPaid=sel.filter(function(o){return o.status!=='paid';});
+  if(!elig.length){toast('Nenhum pedido pago elegível para reembolso');return;}
+  var msg='Você está solicitando reembolso para '+elig.length+' pedido'+(elig.length===1?'':'s')+'. Essa ação é sensível e pode afetar saldo e conciliação. Deseja continuar?';
+  if(sensitive.length) msg+='\n\n⚠ '+sensitive.length+' pedido(s) em Disputa/Chargeback/MED — o reembolso pode não ser permitido.';
+  if(nonPaid.length) msg+='\n\n⚠ '+nonPaid.length+' pedido(s) não pago(s) serão ignorados.';
+  if(!confirm(msg))return;
+  elig.forEach(function(o){ o.status='refund'; o.refundedAt=pedNowISO(); o.updatedAt=o.refundedAt; pedSel.delete(o.id); });
+  toast('Reembolso solicitado em '+elig.length+' pedido'+(elig.length===1?'':'s'));
+  renderPedidos();
+}
+
+/* ---- exportação CSV (client-side; CPF mascarado) ---- */
+function downloadCSV(filename, rows){
+  var sep=';';
+  var csv=rows.map(function(r){return r.map(function(c){var s=(c==null?'':String(c)); if(/[";\n]/.test(s)) s='"'+s.replace(/"/g,'""')+'"'; return s;}).join(sep);}).join('\r\n');
+  var blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url);},1500);
+  toast('Download iniciado: '+filename);
+}
+function pedCSVMatrix(list){
+  var header=['ID','UUID','Cliente','CPF','Email','Telefone','Produto','Tipo','Status','Pagamento','Parcelas','Valor bruto','Valor líquido','Origem','Rastreio','Criado em','Pago em'];
+  var m=[header];
+  list.forEach(function(o){ m.push([o.id,o.uuid,o.customer.name,maskCPF(o.customer.cpf),o.customer.email,o.customer.phone,o.product.name,pedFisico(o)?'Físico':'Digital',PED_ST[o.status].label,pedMethodLabel(o),o.payment.installments||'—',pedBRL(o.amount.gross),pedBRL(pedNet(o)),o.origin,o.tracking?o.tracking.code:'—',pedFmtDateTime(o.createdAt),o.paidAt?pedFmtDateTime(o.paidAt):'—']); });
+  return m;
+}
+function exportPedidosCSV(){ var list=pedFiltered(); if(!list.length){toast('Nenhum pedido para exportar');return;} downloadCSV('pedidos.csv', pedCSVMatrix(list)); }
+function bulkExportSelected(){ var list=PEDIDOS.filter(function(o){return pedSel.has(o.id);}); if(!list.length){toast('Nenhum pedido selecionado');return;} downloadCSV('pedidos-selecionados.csv', pedCSVMatrix(list)); }
+
+/* ---- Relatório (modal de colunas) ---- */
+function REPORT_VAL(o,i){
+  switch(i){
+    case 0: return o.id; case 1: return o.customer.name; case 2: return o.customer.email;
+    case 3: return maskCPF(o.customer.cpf); case 4: return o.customer.phone; case 5: return o.customer.address||'';
+    case 6: return PED_ST[o.status].label; case 7: return pedMethodLabel(o); case 8: return pedBRL(o.amount.gross);
+    case 9: return o.payment.installments||'—'; case 10: return pedFmtDateTime(o.createdAt);
+    case 11: return o.paidAt?pedFmtDateTime(o.paidAt):'—'; case 12: return o.product.name; default: return '';
+  }
+}
+function genReportCSV(){
+  var rows=document.querySelectorAll('#reportCols .rep-item'); var cols=[];
+  rows.forEach(function(r,i){ var ck=r.querySelector('input[type=checkbox]'), tx=r.querySelector('input[type=text]'); if(ck&&ck.checked) cols.push({i:i,header:(tx&&tx.value)||REPORT_COLS[i]}); });
+  if(!cols.length){toast('Selecione ao menos uma coluna');return;}
+  var limInp=document.querySelector('#reportModal .saque-inp'); var lim=parseInt(((limInp&&limInp.value)||'').replace(/\D/g,''),10);
+  var list=pedFiltered(); if(lim>0) list=list.slice(0,lim);
+  var matrix=[cols.map(function(c){return c.header;})];
+  list.forEach(function(o){ matrix.push(cols.map(function(c){return REPORT_VAL(o,c.i);})); });
+  downloadCSV('relatorio-transacoes.csv', matrix); closeReport();
+}
+
+/* ---- filtros / busca / período / data / paginação ---- */
 const PED_DEF={status:'Todos',pag:'Todos',prod:'Todos',rastreio:'Todos',origem:'Todas',parcelas:'Todas'};
-const PED_LAB={status:'Status',pag:'Pagamento',prod:'Produto',rastreio:'Rastreio',origem:'Origem',parcelas:'Parcelas'};
-function getPedFils(){var f={};document.querySelectorAll('#pedFilters .ped-fil').forEach(function(s){f[s.dataset.k]=s.value;});return f;}
-function pedMatch(p,i,f){
-  if(f.status!==PED_DEF.status && p[3]!==f.status) return false;
-  if(f.pag!==PED_DEF.pag && p[4].toUpperCase()!==f.pag.toUpperCase()) return false;
-  if(f.prod!==PED_DEF.prod && (pedFisico(p)?'Físico':'Digital')!==f.prod) return false;
-  if(f.rastreio!==PED_DEF.rastreio){var has=pedFisico(p); if(f.rastreio==='Com rastreio'&&!has)return false; if(f.rastreio==='Sem rastreio'&&has)return false;}
-  if(f.origem!==PED_DEF.origem && pedOrigem(i)!==f.origem) return false;
-  if(f.parcelas!==PED_DEF.parcelas && p[8]!==f.parcelas) return false;
+const PED_LAB={status:'Status',pag:'Pagamento',prod:'Tipo de produto',rastreio:'Rastreio',origem:'Origem',parcelas:'Parcelas'};
+var pedPage=1, pedPageSize=25, pedPageItems=[];
+
+function getPedFils(){var f={};document.querySelectorAll('#pedFilters .ped-fil, #pedMoreFilters .ped-fil').forEach(function(s){f[s.dataset.k]=s.value;});return f;}
+function pedMatchFilters(o,f){
+  if(f.status!==PED_DEF.status && PED_ST[o.status].label!==f.status) return false;
+  if(f.pag!==PED_DEF.pag && pedMethodLabel(o)!==f.pag) return false;
+  if(f.prod!==PED_DEF.prod && (pedFisico(o)?'Físico':'Digital')!==f.prod) return false;
+  if(f.rastreio!==PED_DEF.rastreio){var has=!!o.tracking; if(f.rastreio==='Com rastreio'&&!has)return false; if(f.rastreio==='Sem rastreio'&&has)return false;}
+  if(f.origem!==PED_DEF.origem && o.origin!==f.origem) return false;
+  if(f.parcelas!==PED_DEF.parcelas && (o.payment.installments||'')!==f.parcelas) return false;
   return true;
 }
-function renderPedidos(){
-  var f=getPedFils(), idx=[];
-  pedidos.forEach(function(p,i){ if(pedMatch(p,i,f)) idx.push(i); });
-  document.getElementById('pedidosBody').innerHTML=idx.map(function(i){return pedRow(pedidos[i],i);}).join('')
-    || '<tr><td colspan="'+COLS.length+'" style="text-align:center;color:var(--soft);padding:34px">Nenhum pedido encontrado com esses filtros.</td></tr>';
-  var active=Object.keys(PED_DEF).filter(function(k){return f[k]!==PED_DEF[k];});
-  document.getElementById('filChips').innerHTML=active.length
-    ? '<span class="show-c">Mostrando '+idx.length+' de '+pedidos.length+'</span>'+active.map(function(k){return '<span class="chip"><b>'+PED_LAB[k]+':</b>&nbsp;'+f[k]+' <span class="x" onclick="resetPedFil(\''+k+'\')">✕</span></span>';}).join('')
-    : '';
-  document.getElementById('clearFilBtn').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>'+(active.length?'<span class="ic-cnt">'+active.length+'</span>':'');
+function pedMatchSearch(o){
+  var q=((document.getElementById('pedSearch')||{}).value||'').trim().toLowerCase();
+  if(!q) return true;
+  var digits=q.replace(/\D/g,'');
+  if(digits.length>=3){ var hayD=[o.customer.cpf,o.customer.phone,o.id].join(' ').replace(/\D/g,''); if(hayD.indexOf(digits)>=0) return true; }
+  var hay=[o.id,o.uuid,o.e2e||'',o.customer.name,o.customer.cpf,o.customer.phone,o.customer.email].join(' ').toLowerCase();
+  return hay.indexOf(q)>=0;
 }
+function pedPeriodRange(per){
+  var n=PED_NOW; function d0(dt){return new Date(dt.getFullYear(),dt.getMonth(),dt.getDate(),0,0,0);} function d1(dt){return new Date(dt.getFullYear(),dt.getMonth(),dt.getDate(),23,59,59);}
+  if(per==='Hoje') return {from:d0(n),to:d1(n)};
+  if(per==='Ontem'){var y=new Date(n);y.setDate(n.getDate()-1);return {from:d0(y),to:d1(y)};}
+  if(per==='7 dias'){var s=new Date(n);s.setDate(n.getDate()-6);return {from:d0(s),to:d1(n)};}
+  if(per==='14 dias'){var s=new Date(n);s.setDate(n.getDate()-13);return {from:d0(s),to:d1(n)};}
+  if(per==='30 dias'){var s=new Date(n);s.setDate(n.getDate()-29);return {from:d0(s),to:d1(n)};}
+  if(per==='Esse mês') return {from:new Date(n.getFullYear(),n.getMonth(),1,0,0,0),to:d1(n)};
+  if(per==='Mês passado'){var fy=n.getFullYear(),fm=n.getMonth()-1; if(fm<0){fm=11;fy--;} return {from:new Date(fy,fm,1,0,0,0),to:new Date(fy,fm+1,0,23,59,59)};}
+  return null;
+}
+function pedMatchDate(o){
+  var d=new Date(o.createdAt);
+  var per=((document.getElementById('pedPeriodo')||{}).value)||'Todas';
+  var r=pedPeriodRange(per); if(r){ if(d<r.from||d>r.to) return false; }
+  var df=((document.getElementById('pedDateFrom')||{}).value)||''; var dt=((document.getElementById('pedDateTo')||{}).value)||'';
+  if(df && d<new Date(df+'T00:00:00')) return false;
+  if(dt && d>new Date(dt+'T23:59:59')) return false;
+  return true;
+}
+function pedFiltered(){ var f=getPedFils(); return PEDIDOS.filter(function(o){return pedMatchFilters(o,f)&&pedMatchSearch(o)&&pedMatchDate(o);}); }
+
+function renderPedidos(){
+  var body=document.getElementById('pedidosBody'); if(!body)return;
+  var ncols=pedVisibleCols().length;
+  var list;
+  try{ list=pedFiltered(); }
+  catch(err){ body.innerHTML='<tr><td colspan="'+ncols+'" style="text-align:center;color:#c92a2a;padding:34px">Erro ao carregar pedidos. <button class="btn btn-ghost btn-sm" onclick="renderPedidos()">Tentar novamente</button></td></tr>'; return; }
+  var total=list.length, pages=Math.max(1,Math.ceil(total/pedPageSize));
+  if(pedPage>pages)pedPage=pages; if(pedPage<1)pedPage=1;
+  var start=(pedPage-1)*pedPageSize;
+  pedPageItems=list.slice(start,start+pedPageSize);
+  renderThead();
+  if(pedPageItems.length){
+    body.innerHTML = pedPageItems.map(pedRow).join('');
+  } else if(total===0 && !pedHasFilters()){
+    body.innerHTML = '<tr><td colspan="'+ncols+'" style="text-align:center;color:var(--soft);padding:34px">Nenhum pedido ainda.</td></tr>';
+  } else {
+    body.innerHTML = '<tr><td colspan="'+ncols+'" style="text-align:center;color:var(--soft);padding:30px"><div>Nenhum pedido encontrado com esses filtros.</div><div style="margin-top:8px"><button type="button" class="ped-clearlink" onclick="clearPedFilters()">Limpar filtros</button></div></td></tr>';
+  }
+  document.getElementById('pedInfo').textContent='Mostrando '+(total?start+1:0)+' até '+Math.min(start+pedPageSize,total)+' de '+total+' Pedidos';
+  renderPedChips(total, pedPageItems.length);
+  renderPager(pages);
+  updateBulkBar();
+  pedUpdateMoreBadge();
+  pedUpdateRefreshBtn();
+}
+function pedHasFilters(){
+  var f=getPedFils(); if(Object.keys(PED_DEF).some(function(k){return f[k]!==PED_DEF[k];})) return true;
+  if(((document.getElementById('pedSearch')||{}).value||'').trim()) return true;
+  if((((document.getElementById('pedPeriodo')||{}).value)||'Todas')!=='Todas') return true;
+  if(((document.getElementById('pedDateFrom')||{}).value)||((document.getElementById('pedDateTo')||{}).value)) return true;
+  return false;
+}
+function renderPedChips(total, shown){
+  var chips=[];
+  document.querySelectorAll('#pedFilters .ped-fil, #pedMoreFilters .ped-fil').forEach(function(s){var k=s.dataset.k; if(s.value!==PED_DEF[k]) chips.push(pedChip(PED_LAB[k],s.value,'sel:'+k));});
+  var per=(document.getElementById('pedPeriodo')||{}).value; if(per&&per!=='Todas') chips.push(pedChip('Período',per,'per'));
+  var sv=((document.getElementById('pedSearch')||{}).value||'').trim(); if(sv) chips.push(pedChip('Busca',sv,'search'));
+  var df=(document.getElementById('pedDateFrom')||{}).value, dt=(document.getElementById('pedDateTo')||{}).value;
+  if(df||dt) chips.push(pedChip('Data',(df||'…')+' → '+(dt||'…'),'date'));
+  var hasFil=chips.length>0;
+  var left=hasFil ? '<div class="ped-chips-left">'+chips.join('')+'</div>' : '';
+  /* contador só aparece quando há filtro ativo (na mesma linha dos chips) */
+  var count='';
+  if(hasFil) count = total>0 ? (total+' pedido'+(total===1?'':'s')+' encontrado'+(total===1?'':'s')) : 'Nenhum pedido encontrado com esses filtros.';
+  var el=document.getElementById('filChips');
+  el.innerHTML=left+(count?'<div class="ped-chips-count">'+count+'</div>':'');
+}
+function pedChip(lab,val,key){return '<span class="ped-chip"><b>'+lab+':</b> '+val+'<button type="button" class="ped-chip-x" onclick="resetPedFil(\''+key+'\')" title="Remover filtro">✕</button></span>';}
+function renderPager(pages){
+  var el=document.getElementById('pedPager'); if(!el)return;
+  if(pages<=1){el.innerHTML='';return;}
+  var h='<button onclick="pedGoto('+(pedPage-1)+')" '+(pedPage===1?'disabled':'')+'>‹</button>';
+  for(var p=1;p<=pages;p++){
+    if(p===1||p===pages||Math.abs(p-pedPage)<=1){ h+='<button class="'+(p===pedPage?'on':'')+'" onclick="pedGoto('+p+')">'+p+'</button>'; }
+    else if(p===pedPage-2||p===pedPage+2){ h+='<button disabled>…</button>'; }
+  }
+  h+='<button class="nx" onclick="pedGoto('+(pedPage+1)+')" '+(pedPage===pages?'disabled':'')+'>Próximo ›</button>';
+  el.innerHTML=h;
+}
+function pedGoto(p){ var pages=Math.max(1,Math.ceil(pedFiltered().length/pedPageSize)); pedPage=Math.min(Math.max(1,p),pages); renderPedidos(); }
 function setPedFilValue(sel,val){
   sel.value=val;
   var dd=sel.previousElementSibling;
@@ -3178,8 +3611,63 @@ function setPedFilValue(sel,val){
     dd.querySelectorAll('.dd-menu a').forEach(function(a){a.classList.toggle('sel',a.textContent===val);});
   }
 }
-function resetPedFil(k){var s=document.querySelector('#pedFilters .ped-fil[data-k="'+k+'"]'); if(s){setPedFilValue(s,PED_DEF[k]); renderPedidos();}}
-function clearPedFilters(){document.querySelectorAll('#pedFilters .ped-fil').forEach(function(s){setPedFilValue(s,PED_DEF[s.dataset.k]);}); renderPedidos(); toast('Filtros limpos');}
+function resetPedFil(key){
+  pedPage=1;
+  if(key.indexOf('sel:')===0){ var k=key.slice(4); var s=document.querySelector('#pedFilters .ped-fil[data-k="'+k+'"], #pedMoreFilters .ped-fil[data-k="'+k+'"]'); if(s)setPedFilValue(s,PED_DEF[k]); }
+  else if(key==='per'){ var pe=document.getElementById('pedPeriodo'); if(pe)setPedFilValue(pe,'Todas'); }
+  else if(key==='search'){ var se=document.getElementById('pedSearch'); if(se)se.value=''; }
+  else if(key==='date'){ var a=document.getElementById('pedDateFrom'),b=document.getElementById('pedDateTo'); if(a)a.value=''; if(b)b.value=''; }
+  renderPedidos();
+}
+function clearPedFilters(){
+  document.querySelectorAll('#pedFilters .ped-fil, #pedMoreFilters .ped-fil').forEach(function(s){setPedFilValue(s,PED_DEF[s.dataset.k]);});
+  var pe=document.getElementById('pedPeriodo'); if(pe)setPedFilValue(pe,'Todas');
+  var se=document.getElementById('pedSearch'); if(se)se.value='';
+  var a=document.getElementById('pedDateFrom'),b=document.getElementById('pedDateTo'); if(a)a.value=''; if(b)b.value='';
+  pedPage=1; renderPedidos(); toast('Filtros limpos');
+}
+function pedToggleMore(e){
+  if(e&&e.stopPropagation) e.stopPropagation();
+  var m=document.getElementById('pedMoreFilters'); if(m) m.classList.toggle('show');
+  pedUpdateMoreBadge();
+}
+function pedUpdateMoreBadge(){
+  var n=0, adv={prod:'Todos',rastreio:'Todos',origem:'Todas',parcelas:'Todas'};
+  Object.keys(adv).forEach(function(k){var s=document.querySelector('#pedMoreFilters .ped-fil[data-k="'+k+'"]'); if(s&&s.value!==adv[k])n++;});
+  if(((document.getElementById('pedDateFrom')||{}).value)) n++;
+  if(((document.getElementById('pedDateTo')||{}).value)) n++;
+  var b=document.getElementById('pedMoreBtn'); if(b){ b.textContent='⚙ Mais filtros'+(n?' ('+n+')':''); b.classList.toggle('btn-pink',n>0); }
+}
+function pedRefresh(){ pedPage=1; renderPedidos(); toast('Pedidos atualizados'); }
+function pedActiveFilterCount(){
+  var n=0;
+  document.querySelectorAll('#pedFilters .ped-fil, #pedMoreFilters .ped-fil').forEach(function(s){if(s.value!==PED_DEF[s.dataset.k])n++;});
+  if((((document.getElementById('pedPeriodo')||{}).value)||'Todas')!=='Todas')n++;
+  if(((document.getElementById('pedSearch')||{}).value||'').trim())n++;
+  if(((document.getElementById('pedDateFrom')||{}).value)||((document.getElementById('pedDateTo')||{}).value))n++;
+  return n;
+}
+function pedUpdateRefreshBtn(){
+  var b=document.getElementById('pedRefreshBtn'); if(!b)return;
+  var n=pedActiveFilterCount();
+  if(n>0){ b.textContent='Limpar filtros ('+n+')'; b.title='Limpar todos os filtros'; }
+  else { b.textContent='↻ Atualizar'; b.title='Atualizar lista'; }
+}
+function pedRefreshOrClear(){ if(pedActiveFilterCount()>0) clearPedFilters(); else pedRefresh(); }
+/* trocar filtro/busca limpa a seleção (evita confusão) */
+function pedFilterChanged(){ pedSel.clear(); pedPage=1; renderPedidos(); }
+function pedInit(){
+  document.querySelectorAll('#pedFilters .ped-fil, #pedMoreFilters .ped-fil').forEach(function(s){s.addEventListener('change',pedFilterChanged);});
+  var pe=document.getElementById('pedPeriodo'); if(pe)pe.addEventListener('change',pedFilterChanged);
+  var se=document.getElementById('pedSearch'); if(se)se.addEventListener('input',pedFilterChanged);
+  ['pedDateFrom','pedDateTo'].forEach(function(id){var e=document.getElementById(id); if(e)e.addEventListener('change',pedFilterChanged);});
+  var pz=document.getElementById('pedPageSize'); if(pz)pz.addEventListener('change',function(){pedPageSize=parseInt(pz.value,10)||25;pedPage=1;renderPedidos();});
+  buildColMenu();
+  pedBuildStatusMenu();
+  renderPedidos();
+}
+document.addEventListener('click',function(){var p=document.getElementById('pedColPop'); if(p)p.classList.remove('show'); var sp=document.getElementById('pedStatusPop'); if(sp)sp.classList.remove('show'); var m=document.getElementById('pedMoreFilters'); if(m&&m.classList.contains('show')){m.classList.remove('show'); if(typeof pedUpdateMoreBadge==='function')pedUpdateMoreBadge();}});
+/* PEDIDOS — FIM (lógica de filtros/render) */
 
 /* ---------- financeiro data ---------- */
 const finMap={'Concluído':'t-green','Em análise':'t-amber','Processando':'t-orange','Negado':'t-red','Falhou':'t-red','Liquidada':'t-green'};
@@ -3484,7 +3972,16 @@ function prodTab(w,b){b.parentElement.querySelectorAll('button').forEach(x=>x.cl
 function prodGo(tab){go('produtos');var map={meus:0,shopify:1,rec:2,afil:3};var btns=document.querySelectorAll('#page-produtos .ptabs button');var b=btns[map[tab]];if(b)prodTab(tab,b);document.querySelectorAll('#grp-prod .nav-sub a').forEach(function(a){a.classList.toggle('active',a.id==='prod-'+tab);});document.getElementById('grp-prod').classList.add('open');}
 /* rastreio editável */
 function rastEdit(on){document.getElementById('rastView').style.display=on?'none':'block';document.getElementById('rastEditBox').style.display=on?'block':'none';}
-function rastSave(){const c=document.getElementById('rastCodeInp').value,l=document.getElementById('rastLinkInp').value;document.getElementById('rastCode').textContent=c;document.getElementById('rastLink').textContent=l;rastEdit(false);toast('Rastreio atualizado');}
+function rastSave(){
+  var c=document.getElementById('rastCodeInp').value,l=document.getElementById('rastLinkInp').value;
+  var o=(typeof pedById==='function')?pedById(curPedId):null;
+  if(o){ o.tracking=(c||l)?{code:c,url:l}:null; o.updatedAt=pedNowISO(); }
+  document.getElementById('rastCode').textContent=c||'—';
+  document.getElementById('rastLink').textContent=l||'—';
+  rastEdit(false);
+  if(typeof renderPedidos==='function') renderPedidos();
+  toast('Rastreio atualizado');
+}
 const shopProds=[
  ['mzzem1fgre','Vestido Zoe (Cópia)','9334109077739','47827545260267','159,90','Rascunho'],
  ['ro3pqcmjkp','Conjunto Amália (Cópia)','9330091852011','47817598075115','179,90','Rascunho'],
@@ -3684,7 +4181,7 @@ const mktArq=[
 ];
 function mkThumb(i){return 'background:'+MK_GRAD[i%MK_GRAD.length];}
 function mkTg(s,m){var c=m[s]||['#eef0f4','#6b7079'];return '<span class="mk-tg" style="background:'+c[0]+';color:'+c[1]+'">'+s+'</span>';}
-function mkStatusTag(s){return mkTg(s,{'Ativo':['#e7f7ee','#0f7a3d'],'Sem Estoque':['#fff5dc','#9a6a00'],'Desativado':['#eef0f4','#6b7079'],'Desconto':['#ffe3f0','#ff1f8e']});}
+function mkStatusTag(s){return mkTg(s,{'Ativo':['#e7f7ee','#0f7a3d'],'Sem Estoque':['#fff5dc','#9a6a00'],'Desativado':['#eef0f4','#6b7079'],'Desconto':['var(--accent-soft)','var(--accent)']});}
 function mkTipoTag(t){return mkTg(t,{'Físico':['#e7f0ff','#2f7bff'],'Digital':['#efe7ff','#7c3aed'],'Serviço':['#e0f7f4','#0c8c7e']});}
 function mkCard(p,i,mode){
   var act = mode==='afil'
@@ -3810,8 +4307,8 @@ function closeMktEdit(){document.getElementById('mktModal').classList.remove('sh
 document.addEventListener('click',function(e){var p=e.target.closest&&e.target.closest('.seg-pill');if(p){[].forEach.call(p.parentElement.children,function(x){x.classList.remove('on');});p.classList.add('on');}});
 
 enhanceSelects();
-document.querySelectorAll('#pedFilters .ped-fil').forEach(function(s){s.addEventListener('change',renderPedidos);});
-renderThead(); renderPedidos(); mkRender();
+pedInit();
+mkRender();
 enterApp();
 </script>
 </body>
